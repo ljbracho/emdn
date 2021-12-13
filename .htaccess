@@ -1,3 +1,0 @@
-   <IfModule php5_module>
-     php_value date.timezone ="Europe/Barcelona"
-    </IfModule>
