@@ -14,7 +14,7 @@
       }
   } else {
     include('dataConex.php');
-$con = new mysqli($server,$user,$clave,"emdn_store");
+$con = new mysqli($server,$user,$clave,$dbname);
   }
 // Check connection
 if ($con -> connect_errno) {
