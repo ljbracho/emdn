@@ -1,6 +1,6 @@
 <?php
 session_start();
-$base_url = "http://www.emdnstore.es/";
+$base_url = "https://botiga.emdn.cat/";
 ?>
 <!DOCTYPE html>
 <html>

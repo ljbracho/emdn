@@ -40,6 +40,20 @@
              Veure Etapa </a></li>
           </ul>
         </li>
+        <li class="treeview">
+          <a href="" data-page='Categorias'>
+            <i class="fa fa-list-alt"></i>
+            <span>Modalidad / Itinerario</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="" data-page="add-modal"><i class="fa fa-circle-o text-yellow"></i> Afegir </a></li>
+            <li><a href="" data-page="modal"><i class="fa fa-circle-o text-red"></i> 
+             Veure  </a></li>
+          </ul>
+        </li>
 		<li class="treeview">
           <a href="" data-page='Categorias'>
             <i class="fa fa-list-alt"></i>

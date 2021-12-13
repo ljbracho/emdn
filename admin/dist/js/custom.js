@@ -73,6 +73,28 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 								responsive: true
 							});
 					break;
+					case "modal":				
+					dataTableAjax = $('#example1').DataTable({
+								  'processing': true,
+								  'serverSide': true,
+								  'serverMethod': 'post',
+								  'ajax': {
+									  'url':'cheffunctions.php?action=get_modals'
+								  },
+								"order": [[ 0, "desc" ]],
+								"columns": [
+									{ "data": "id" },
+									{ "data": "modalidad" },
+									{ "data": "tipo" },
+									{ "data": "action_del_edit" }
+								],
+								"columnDefs": [ {
+									"targets": [2,3],
+									"orderable": false
+									}],
+								responsive: true
+							});
+					break;
 					case "promotions":				
 					dataTableAjax = $('#example1').DataTable({
 								  'processing': true,
@@ -355,6 +377,9 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 					case "create_new_order":
 					create_order_admin();
 					break;
+					case "add-modal":
+					add_modal();
+					break;
 					case "add-category":
 					add_category();
 					var dataa = {
@@ -606,6 +631,69 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 				submitHandler: function(form) {
 					var fd = new FormData(form);
 					fd.append('addCategory','addCategory');
+					 $.ajax({
+						url:'cheffunctions.php',
+						method:'POST',
+						data: fd,
+						contentType: false,
+						processData: false,
+						dataType:'json',
+						beforeSend: function(){
+							if(currentRequest != null){
+								currentRequest.abort();
+							}
+							$.preloader.start({
+								modal: true,
+								src : 'dist/img/loader.svg'
+							});
+						},
+						success: function(data){
+							$.preloader.stop();
+							if(data.error){
+								//alert();
+								Swal.fire({
+								  icon: 'error',
+								  title: 'Oops...',
+								  text: 'Sorry '+ data.message,
+								});
+							}else{
+									Swal.fire({
+									  icon: 'success',
+									  title: 'Success!',
+									  showConfirmButton: false,
+									  text: data.message,
+									  timer: 3000
+									});
+									$('#insertion')[0].reset();
+							}	
+						},
+						error: function (jqXHR, exception) {
+								getErrorMessage(jqXHR, exception);
+						}
+					});
+					
+				},
+				error: function (jqXHR, exception) {
+					getErrorMessage(jqXHR, exception);
+				}
+		});
+	}
+	//add modalidad
+	function add_modal(){
+		  $("#insertion").validate({
+				rules: {
+					cate_name: {
+						required: true
+					}
+				},
+				messages: {
+					cate_name: {
+						required: "Please enter a Modalidad Name"
+					}
+				},
+				submitHandler: function(form) {
+					var fd = new FormData(form);
+					fd.append('addModal','addModal');
 					 $.ajax({
 						url:'cheffunctions.php',
 						method:'POST',
@@ -2055,11 +2143,18 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 					$('#modal-edit').modal('show');
 				}else if(page=='courses'){
 						 $('#course_name').val(data.course_name);  
-						$('#description').html(data.description);
+						$('#desciption').html(data.description);
+						$('#modal').val(data.modalidad);
+						$('#etpa').val(data.etpa);
 						 $('#cat_id').val(data.id);
 						
 						 $('#modal-edit').modal('show');
-					 }else if(page=='promotions'){
+					 }else if(page=='modal'){
+						$('#modalidad').val(data.modalidad);  
+						$('#cat_id').val(data.id);
+					   
+						$('#modal-edit').modal('show');
+					}else if(page=='promotions'){
 						 $('#promotion_name').val(data.promotion_name); 
 						 $('#already_uploaded').html("<img src='uploads/promotions/"+data.promtion_img+"' width='100%' class='img thumbnail'>")
 						$('#pro_description').html(data.description);
@@ -2342,11 +2437,26 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 		} else if(page=='courses'){
 			var size_name = $('.course_name').val();
 			var size_desc = $('.desciption').val();
+			var etpa = $('#etpa').val();
+			var modal = $('#modal').val();
 			var data = {
 				'action_edit_update':'yes',
 				'page':page,
 				'course_name':size_name,
 				'description':size_desc,
+				'catid':cat_id,
+				'etpa': etpa,
+				'modal': modal
+			}
+		  editingajaxfunction(data);
+		} else if(page=='modal'){
+			var modalidad = $('#modalidad').val();
+			var tipo = $('#tipo').val();
+			var data = {
+				'action_edit_update':'yes',
+				'page':page,
+				'modalidad':modalidad,
+				'tipo':tipo,
 				'catid':cat_id
 			}
 		  editingajaxfunction(data);

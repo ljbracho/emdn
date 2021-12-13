@@ -28,6 +28,18 @@
                       <option value="<?php echo $cat['id'];?>"> <?php echo $cat['cat_name'] ?></option>
                       <?php } ?>
                   </select>
+                </div><div class="form-group">
+                  <label for="etpa">Seleccionar Modalidad / Itinerario</label>
+                  
+                  <select name="tipo" id="tipo" class="form-control">
+                  <option value="0" selected disabled >-- Seleccionar --</option>
+                    <option value="1">Modalidad</option>
+                    <option value="2">Itinerario</option>
+                  </select>
+                  <div id="modales">
+
+
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="code">Descripció del curs</label>
@@ -43,3 +55,33 @@
             </form>
           </div>
     </section>
+
+    
+<script type="text/javascript">
+$(function() {
+    $("#tipo").change(function() {
+        let modal = $(this).val();
+        $.ajax({
+            url: 'cheffunctions.php',
+            method: 'POST',
+            data: {
+                action: 'get_modals_tipo',
+                tipo: modal
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.error) {
+
+                } else {
+                $('#modales').empty();
+                  for (i=0; i < data.modals.length; i++) {
+                    $('#modales').append("<br><input type='checkbox' name='modalidad[]' value='"+ data.modals[i].id +"' id='modal"+ data.modals[i].id +"'> <label for='modal"+ data.modals[i].id +"'> " + data.modals[i].modalidad +"</label>");
+                }
+                }
+
+            }
+        });
+    });
+
+});
+</script>

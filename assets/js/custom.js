@@ -32,6 +32,7 @@ $(document).ready(function(){
             });
       
   });
+
   
    $(document).on('click','.search_book',function(){
        console.log($('.etapa').val());
@@ -79,40 +80,42 @@ $(document).ready(function(){
    
    
    $(document).on("change",'#course_id',function(e){
-	    
-	    if($('#course_id option:selected').val() == "17"){
-	       
-	        var option = "<option value=''>Itinerari</option> <option value='Itinerari Científic'>Itinerari Científic</option> <option value='Itinerari Social'>Itinerari Social</option> <option value='Itinerari Humanístic'>Itinerari Humanístic</option>";
-	         $('#modality').html(option);
-	         $('#etapa_box').removeClass('col-sm-4');
-	         $('#etapa_box').addClass('col-sm-3');
-	         $('#courses_box').removeClass('col-sm-4');
-	         $('#courses_box').addClass('col-sm-3');
-	         $('#modality_box').show();
-	    }else if($('#course_id option:selected').val() == "18"){
-	        
-	        var option = "<option value=''> Modalitat</option> <option value='Modalitat: Científic'>Modalitat: Científic</option> <option value='Modalitat: Tecnològic'>Modalitat: Tecnològic</option> <option value='Modalitat: Ciències Socials'>Modalitat: Ciències Socials</option><option value='Modalitat: Humanitats'>Modalitat: Humanitats</option><option value='Modalitat: Artístic'>Modalitat: Artístic</option>";
-	         $('#modality').html(option);
-	         $('#etapa_box').removeClass('col-sm-4');
-	         $('#etapa_box').addClass('col-sm-3');
-	         $('#courses_box').removeClass('col-sm-4');
-	         $('#courses_box').addClass('col-sm-3');
-	         $('#modality_box').show();
-	    }else if($('#course_id option:selected').val() == "19"){
-	         var option = "<option value=''> Modalitat</option> <option value='Modalitat: Científic'>Modalitat: Científic</option> <option value='Modalitat: Tecnològic'>Modalitat: Tecnològic</option> <option value='Modalitat: Ciències Socials'>Modalitat: Ciències Socials</option><option value='Modalitat: Humanitats'>Modalitat: Humanitats</option><option value='Modalitat: Artístic'>Modalitat: Artístic</option>";
-	         $('#modality').html(option);
-	         $('#etapa_box').removeClass('col-sm-4');
-	         $('#etapa_box').addClass('col-sm-3');
-	         $('#courses_box').removeClass('col-sm-4');
-	         $('#courses_box').addClass('col-sm-3');
-	         $('#modality_box').show();
-	    }else{
+      var modal =  $(this).val();
+      $('#modality').empty().append('<option value="0" selected disabled >Seleccionar Modalidad / Itinerario</option>');  
+       $('.error_label').text('');
+    $.ajax({
+        url: 'All_Functions.php',
+        dataType: 'json',
+        type: 'POST',
+        data: {"curso": modal,'action':'get_modal'},
+        success: function(response) {
+            console.log(response);
+          var array = response.modals;
+          if (!response.error)
+          {
+            for (i in array) {     
+             $("#modality").append("<option value="+array[i].id+">"+array[i].modalidad+"</option>");
+           }
+           $('#etapa_box').removeClass('col-sm-4');
+           $('#etapa_box').addClass('col-sm-3');
+           $('#courses_box').removeClass('col-sm-4');
+           $('#courses_box').addClass('col-sm-3');
+           $('#modality_box').show();
+          } else{
 	        $('#etapa_box').removeClass('col-sm-3');
 	         $('#etapa_box').addClass('col-sm-4');
 	         $('#courses_box').removeClass('col-sm-3');
 	         $('#courses_box').addClass('col-sm-4');
 	        $('#modality_box').hide();
 	    }
+
+        },
+        error: function(x, e) {
+
+        }
+
+    });
+	    
 	    
 	});
    

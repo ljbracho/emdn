@@ -44,6 +44,27 @@
                 <div class="form-group">
                   <label for="course_name">Nombre del Curso</label>
                   <input type="text" class="form-control course_name" id="course_name" name='course_name' placeholder="Nombre del tamano">
+                </div>
+                <div class="form-group">
+                  <label for="course_name">Etpa</label>
+                  <select name="etpa" class="form-control etpa" id='etpa'>
+                       <option value=""> Seleccionar etapa</option>
+                      <?php 
+                      $categories =  mysqli_query($con,"SELECT * FROM `categorias`");
+                      while($cat =  mysqli_fetch_assoc($categories)){
+                      ?>
+                      <option value="<?php echo $cat['id'];?>"> <?php echo $cat['cat_name'] ?></option>
+                      <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="course_name">Modalidad / Itinerario</label>
+                  
+                  <select name="tipo" id="tipo" class="form-control">
+                    <option value="1">Modalidad</option>
+                    <option value="2">Itinerario</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="desciption">Descripcion de Curso</label>
                   <textarea rows='5' class='form-control desciption' id="desciption" name='desciption'></textarea>

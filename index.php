@@ -6,8 +6,29 @@ header('Content-Type: text/html; charset=utf8mb4');
 session_start();
 unset($_SESSION['cart']);
 include('header.php');
-
 include('admin/connection.php');
+$sql = "select * from config_messages where tipo=2";
+$results = mysqli_query($con, $sql);
+$data = mysqli_fetch_assoc($results);
+if ($data['estatus'] == 1) {
+    $msg = $data["message"];
+    ?>
+<center><img src="https://emdn.cat/wp-content/uploads/2019/12/Logo-EMDN.png"></center>
+<div style="opacity: 0.7; background: white">
+    <table border=3 bordercolor="orange" cellpadding=14 CELLSPACING=10 align="center"> 
+    <tr>
+    <td>
+    <center>
+        <?= utf8_decode($msg) ?>
+
+    </center>
+    </td>
+    </tr>
+    </table>
+</div>
+    <?php
+} else {
+
 $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  where course_id = '0' "));
 
 ?>
@@ -93,6 +114,8 @@ $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`
     
 </div>
 <?php
+
+ }
 if(isset($_SESSION['order_success'])){
     if($_SESSION['order_success'] == 'yes'){
 ?>

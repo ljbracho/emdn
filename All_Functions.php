@@ -25,6 +25,31 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_curs' ){
 
 }
 
+if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
+    
+    $query = "select * from courses where id = ".$_POST['curso'];
+    $results = mysqli_query($con,$query);
+    $curso = mysqli_fetch_assoc($results);
+    $ids = json_decode($curso['modalidad']);
+    $query = "select * from modalidad where id in (". implode(',',$ids) . ")";
+    $results = mysqli_query($con,$query);
+    if(mysqli_num_rows($results) > 0){
+        while($row =  mysqli_fetch_assoc($results)){
+            $modals[] = $row;
+        }
+        $response['error'] =  false;
+        $response['msg'] = 'course available';
+        $response['modals'] = $modals;
+    }else{
+        $response['error'] =  true;
+        $response['msg'] = 'No Course Exists';
+        
+    }
+    
+    echo json_encode($response);
+    die;
+
+}
 
 if(isset($_POST['action']) && $_POST['action'] == 'get_books' ){
     

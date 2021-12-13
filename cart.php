@@ -5,7 +5,7 @@ include 'admin/connection.php';
 if(isset($_GET['etapa']) && isset($_GET['course']) ){
     if(isset($_GET['modality'])){
         $modality = $_GET['modality'];
-         $query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = ".$_GET['course']." AND modality = '".$modality."'";
+         $query = "select * from products where modality like '%".$modality."%'";
     }else{
         $query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = ".$_GET['course'];
     }
@@ -14,6 +14,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
     
     $etapaname = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `categorias` where id = ".$_GET['etapa']));
     $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  where course_id = ".$_GET['course']));
+    $modal = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `modalidad`  where id = ".$_GET['modality']));
     $course = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `courses` where id = ".$_GET['course']));
     $_SESSION['course_name'] = $course['course_name'];
     // if(mysqli_num_rows($results) > 0){
@@ -43,7 +44,9 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                     <img src="assets/imgs/Logo-EMDN.png" class='logo_web'>
                     
                 </div>
-    
+    <?php 
+        if ($course_message['message_content'] != '') {
+    ?>
     <div class="text-slides mb-3">
         <div class="slideshow-container">
             
@@ -53,6 +56,9 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                 
             </div>
     </div>
+    <?php
+        }
+    ?>
     </div>
     <div class='about-usbar mb-3'>
         <?php
@@ -71,7 +77,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
             ?>
             
             <div class="col-sm-6 pt-1 text-left">
-                <p class='m-0'><b><?php echo $etapaname['cat_name']." ".$course['course_name']." ".$_GET['modality'];?></b></p>
+                <p class='m-0'><b><?php echo $etapaname['cat_name']." ".$course['course_name']." ".$modal['modalidad'];?></b></p>
             </div>
             <div class="col-sm-6">
                 <span class="float-right text-dark m-0 bg-price"><b><span class='total_price'>0</span> € </b></span>
@@ -106,7 +112,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                         //  unset($_SESSION['cart']);
                         //  die;
                          
-                            $preu_final = str_replace(",",".",$book['preu_final']);
+                            $preu_final = str_replace(",",".",$percentTotal);
                             $pricetotal += $preu_final;
                             $ivaprice += ($preu_final/100)*$book['iva'];
                             $total_cart_price +=$percentTotal;
@@ -114,7 +120,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                                 $_SESSION['cart'] = array();
                             }
                              $book_id = $book['id'];
-                             $course_id = $book['course_id'];
+                             $course_id = $course['id'];
                              $qty = 1;
                             // add new item on array
                             $cart_item=array(
@@ -150,7 +156,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                   <td><?php echo $book['book_name'];?></td>
                    <td><?php echo $book['editorial'];?></td>
                   <td>
-                    <button type='button' data-price='<?php echo str_replace(",",".",$book['preu_final']);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
+                    <button type='button' data-price='<?php echo str_replace(",",".",$percentTotal);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
                    </td>
                   <!--<td><?php  echo $book['pv_pmm'];?> €</td>-->
                   <!--<td><?php  echo $book['preu_final'];?> €</td>-->
@@ -159,7 +165,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                   <!--<td><?php echo $book['obligatori'];?></td>-->
                    <td><?php
                         
-                        echo $book['preu_final']; //$percentTotal;
+                        echo $percentTotal; //$percentTotal;
                   
                   ?> €</td>
                   

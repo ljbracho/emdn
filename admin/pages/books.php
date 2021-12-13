@@ -131,8 +131,12 @@
 <div class="form-group">
 
   <label for="pre_final">Modalidad</label>
-
-  <input type="text"   name='modality'  class="form-control pre_final" id="modality" >
+  <?php 
+                      $categories =  mysqli_query($con,"SELECT * FROM `modalidad`");
+                      while($cat =  mysqli_fetch_assoc($categories)){
+                      ?><br>
+                      <input type="checkbox" name="modalidad[]" value="<?= $cat['id']  ?>" id="modal<?= $cat['id']  ?>"> <label for="modal<?= $cat['id']  ?>"><?= $cat['modalidad']  ?></label>
+                      <?php } ?>
 
 </div>
 

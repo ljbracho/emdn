@@ -74,6 +74,46 @@
 		echo json_encode($response);
 		die;
 	}
+	
+	if (isset($_POST['action']) && $_POST['action'] == 'get_modals_tipo') {
+
+		$query = "select * from modalidad where tipo = " . $_POST['tipo'];
+		$results = mysqli_query($con, $query);
+		if (mysqli_num_rows($results) > 0) {
+			while ($row =  mysqli_fetch_assoc($results)) {
+				$modals[] = $row;
+			}
+			$response['error'] =  false;
+			$response['msg'] = 'course available';
+			$response['modals'] = $modals;
+		} else {
+			$response['error'] =  true;
+			$response['msg'] = 'No Course Exists';
+		}
+
+		echo json_encode($response);
+		die;
+	}
+
+	if (isset($_POST['action']) && $_POST['action'] == 'get_modals') {
+
+		$query = "select * from modalidad";
+		$results = mysqli_query($con, $query);
+		if (mysqli_num_rows($results) > 0) {
+			while ($row =  mysqli_fetch_assoc($results)) {
+				$modals[] = $row;
+			}
+			$response['error'] =  false;
+			$response['msg'] = 'Modals available';
+			$response['modals'] = $modals;
+		} else {
+			$response['error'] =  true;
+			$response['msg'] = 'No modalidad Exists';
+		}
+
+		echo json_encode($response);
+		die;
+	}
 
 	if (isset($_POST['action']) && $_POST['action'] == 'get_books_for_order') {
 
@@ -149,6 +189,22 @@
 			move_uploaded_file($_FILES['icon_cat']['tmp_name'], $location);
 		}
 		$query = "INSERT INTO categorias(cat_name,cate_description,image) VALUES('$category_name','$category_des','$img_name')";
+		$res = mysqli_query($con, $query);
+		if ($res) {
+			$response['error'] = false;
+			$response['success_msg'] = "Insertado con éxito!";
+		} else {
+			$response['error'] = true;
+			$response['error_msg'] = "Algo salió mal";
+		}
+		echo json_encode($response);
+
+		die;
+	}
+	if (isset($_POST['addModal'])) {
+		$modalidad = htmlspecialchars($_POST['modalidad'], ENT_QUOTES);
+		$tipo = $_POST['tipo'];
+		$query = "INSERT INTO modalidad(modalidad,tipo) VALUES('$modalidad','$tipo')";
 		$res = mysqli_query($con, $query);
 		if ($res) {
 			$response['error'] = false;
@@ -385,8 +441,9 @@
 	if (isset($_POST['addCourse'])) {
 		$course_name = htmlspecialchars($_POST['course_name'], ENT_QUOTES);
 		$etpa = $_POST['etpa'];
+		$modal = json_encode($_POST['modalidad']);
 		$description = $_POST['description'];
-		$query = "INSERT INTO courses(course_name,etpa,description) VALUES('$course_name','$etpa','$description')";
+		$query = "INSERT INTO courses(course_name,etpa,description,modalidad) VALUES('$course_name','$etpa','$description','$modal')";
 		$res = mysqli_query($con, $query);
 		if ($res) {
 			$response['error'] = false;
@@ -476,6 +533,25 @@
 	}
 
 	if (isset($_POST['get_message_course'])) {
+		$course_id = $_POST['missatge_course'];
+		$check_msg = mysqli_query($con, "SELECT * FROM `messages`  where course_id = '$course_id'");
+		if (mysqli_num_rows($check_msg) > 0) {
+			$get_msg = mysqli_fetch_assoc($check_msg);
+			$response['message'] = $get_msg['message_content'];
+			$response['error'] = false;
+			$response['success_msg'] = $message;
+		} else {
+			$response['error'] = true;
+			$response['error_msg'] = "No Message of this Course";
+		}
+
+		echo json_encode($response);
+
+		die;
+	}
+
+
+	if (isset($_POST['get_modalidad'])) {
 		$course_id = $_POST['missatge_course'];
 		$check_msg = mysqli_query($con, "SELECT * FROM `messages`  where course_id = '$course_id'");
 		if (mysqli_num_rows($check_msg) > 0) {
@@ -623,7 +699,7 @@
 		$editorial = $_POST['editorial'];
 		$pre_final = $_POST['pre_final'];
 		$obligatori =  $_POST['obligatori'];
-		$modality =  $_POST['modality'];
+		$modality =  json_encode($_POST['modalidad']);
 		$iva =  $_POST['iva'];
 
 		$pro_img = $_FILES['bookimage']['name'];
@@ -775,6 +851,59 @@
 				echo json_encode($response);
 				die;
 				break;
+				case "get_modals":
+					$draw = $_POST['draw'];
+					$row = $_POST['start'];
+					$rowperpage = $_POST['length']; // Rows display per page
+					$columnIndex = $_POST['order'][0]['column']; // Column index
+					$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+					$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+					$searchValue = $_POST['search']['value']; // Search value
+	
+					## Search 
+					$searchQuery = " ";
+					if ($searchValue != '') {
+						$searchQuery = " and (modalidad like '%" . $searchValue . "%' ) ";
+					}
+	
+					## Total number of records without filtering
+					$sel = mysqli_query($con, "select count(*) as allcount from modalidad");
+					$records = mysqli_fetch_assoc($sel);
+					$totalRecords = $records['allcount'];
+	
+					## Total number of record with filtering
+					$sel = mysqli_query($con, "select count(*) as allcount from modalidad WHERE 1 " . $searchQuery);
+					$records = mysqli_fetch_assoc($sel);
+					$totalRecordwithFilter = $records['allcount'];
+	
+					## Fetch records
+					$empQuery = "select * from modalidad WHERE 1 " . $searchQuery . "   order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
+					$empRecords = mysqli_query($con, $empQuery);
+					$data = array();
+	
+					while ($row = mysqli_fetch_assoc($empRecords)) {
+						$data[] = array(
+							"id" => "#ETPA" . $row['id'],
+							"modalidad" => $row['modalidad'],
+							"tipo" => ($row['tipo'] == 1) ? 'Modalidad' : 'Itinerario',
+							"action_del_edit" => "<div data-cat_id='" . $row['id'] . "'><button type='button' class='btn btn-primary btn-edit'><i class='fa fa-edit'></i></button>
+					<input type='hidden' class='edit_cat_id' data-catid='" . $row['id'] . "'>
+					<button class='btn btn-danger btn-yes' type='button'><i class='fa fa-trash'></i></button> 
+					<input type='hidden' class='cat_id' data-id='" . $row['id'] . "'>
+					<input type='hidden' class='page' value='modal'>
+					</div>"
+						);
+					}
+					## Response
+					$response = array(
+						"draw" => intval($draw),
+						"iTotalRecords" => $totalRecords,
+						"iTotalDisplayRecords" => $totalRecordwithFilter,
+						"aaData" => $data
+					);
+					echo json_encode($response);
+					die;
+					break;
 			case "promotions":
 				$draw = $_POST['draw'];
 				$row = $_POST['start'];
@@ -1261,6 +1390,9 @@
 			case "courses":
 				$querydelete = "Delete from courses where id=$id";
 				break;
+			case "modal":
+				$querydelete = "Delete from modalidad where id=$id";
+				break;
 			case "brands":
 				$querydelete = "Delete from brands where id=$id";
 				break;
@@ -1301,6 +1433,9 @@
 		switch ($page) {
 			case "category":
 				$queryedit = "Select * from categorias where id=$id";
+				break;
+			case "modal":
+				$queryedit = "Select * from modalidad where id=$id";
 				break;
 			case "promotions":
 				$queryedit = "Select * from promotions where id=$id";
@@ -1384,7 +1519,14 @@
 			case "courses":
 				$course_name = htmlspecialchars($_POST['course_name'], ENT_QUOTES);
 				$course_description = $_POST['description'];
-				$queryupdate = "Update courses Set course_name ='$course_name',description='$course_description'  where id=$id";
+				$etpa = $_POST['etpa'];
+				$modal = $_POST['modal'];
+				$queryupdate = "Update courses Set course_name ='$course_name',description='$course_description',etpa='$etpa',modalidad='$modal'  where id=$id";
+				break;
+			case "modal":
+				$modalidad = htmlspecialchars($_POST['modalidad'], ENT_QUOTES);
+				$tipo = $_POST['tipo'];
+				$queryupdate = "Update modalidad Set modalidad ='$modalidad', tipo='$tipo' where id=$id";
 				break;
 			case "transactions":
 				$fecha =  $_POST['date_time'];
@@ -1423,7 +1565,7 @@
 				$description = $_POST['description'];
 				$editorial = $_POST['editorial'];
 				$pre_final = $_POST['pre_final'];
-				$modality = $_POST["modality"];
+				$modality = json_encode($_POST["modalidad"]);
 				$obligatori =  $_POST['obligatori'];
 				$iva =  $_POST['iva'];
 
