@@ -12,15 +12,15 @@ $base_url = "http://www.emdnstore.es/";
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 </style>
-<link href="assets/css/custom.css" rel='stylesheet'>
+<link href="/assets/css/custom.css" rel='stylesheet'>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 </head>
 <body>
 <div class='left_ring d-none d-sm-block'>
-    <img src='assets/imgs/Group 1.png' width='100%'>
+    <img src='/assets/imgs/Group 1.png' width='100%'>
 </div>
 <div class='right_ring d-none d-sm-block'>
-    <img src='assets/imgs/Group 2.png' width='100%'>
+    <img src='/assets/imgs/Group 2.png' width='100%'>
 </div>
 <!-- Navigation -->
 <div class="fixed-topp">
