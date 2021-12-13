@@ -85,14 +85,14 @@ include 'admin/connection.php';
                       <!--                      <i class="fa fa-plus"></i>-->
                       <!--                  </button>-->
                       <!--              </span></div>-->
-                                    <button type='button' data-price='<?php echo str_replace(",",".",$book['preu_final']);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
+                                    <button type='button' data-price='<?php echo str_replace(",",".",($single + $ivaprice));?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
                                 </td>
                 
                   <!--<td><?php  echo $book['preu_final'];?> €</td>-->
                   <!--<td><?php  echo $book['iva'];?> </td>-->
                    <td><?php
                         //$percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
-                        echo $book['preu_final'];
+                        echo $single + $ivaprice;
                   
                   ?> € </td>
                 </tr>
@@ -177,7 +177,7 @@ include 'admin/connection.php';
                      <input type='hidden' name='total_price' class='total' value='<?php echo number_format($price_without_iva,2,".","") ;?>'>
                      <input type='hidden' name='monto' class='total' value='<?php echo number_format($price_without_iva,2,".","") ;?>'>
                      <input type='hidden' name='descrip' value='PAGO ONLINE'>
-                     <p><b><span class='total_price' id='tot'><?php echo number_format($price_without_iva,2,".","") ;?></span> €</b></p>
+                     <p><b><span class='total_price' id='tot'><?php echo number_format($total,2,".","") ;?></span> €</b></p>
                  </div>
              </div>
        </div>

@@ -32,7 +32,7 @@
                   <label for="etpa">Seleccionar Modalidad / Itinerario</label>
                   
                   <select name="tipo" id="tipo" class="form-control">
-                  <option value="0" selected disabled >-- Seleccionar --</option>
+                  <option value="0" selected >-- Seleccionar --</option>
                     <option value="1">Modalidad</option>
                     <option value="2">Itinerario</option>
                   </select>
@@ -70,10 +70,8 @@ $(function() {
             },
             dataType: 'json',
             success: function(data) {
-                if (data.error) {
-
-                } else {
-                $('#modales').empty();
+              $('#modales').empty();
+                if (!data.error)  {
                   for (i=0; i < data.modals.length; i++) {
                     $('#modales').append("<br><input type='checkbox' name='modalidad[]' value='"+ data.modals[i].id +"' id='modal"+ data.modals[i].id +"'> <label for='modal"+ data.modals[i].id +"'> " + data.modals[i].modalidad +"</label>");
                 }
