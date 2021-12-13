@@ -16,7 +16,7 @@
         <div class='row'>
           <div class='col pt-2 pb-2'>
             <span>
-              <b>SU PAGO HA SIDO RECHAZADO, POR FAVOR INTENTE NUEVAMENTE</b>
+              <b>EL SEU PAGAMENT HA ESTAT REBUÏT, SI US PLAU INTENT NOVAMENT</b>
             </span>
           </div>
         </div>

@@ -10,7 +10,7 @@ session_start();
 unset($_SESSION['cart']);
 
 $redsys = new Redsys;
-$message = "ERROR AL PROCESAR DATOS, POR FAVOR INTENTE MAS TARDE";
+$message = "ERROR EN PROCESSAR DADES, SI US PLAU INTENT MES TARDA";
 
 $orderId = isset($_POST["oid"]) ? $_POST["oid"] : $_GET["oid"];
 $version = isset($_POST["Ds_SignatureVersion"]) ? $_POST["Ds_SignatureVersion"] : $_GET["Ds_SignatureVersion"];
@@ -33,9 +33,9 @@ if ($originalSignature === $receivedSignature && $decodec->Ds_Order === $orderId
         $order = mysqli_fetch_assoc($order);
         mysqli_query($con, "UPDATE `orders_redsys` SET `approved` = 1 WHERE `id` = " . $order['id']);
         mysqli_query($con, "UPDATE `orders` SET `payment_status` = 'paid' WHERE `id` = " . $order['order_id']);
-        $message = "SU PAGO HA SIDO PROCESADO, PEDIDO NRO.: $orderId";
+        $message = "EL SEU PAGAMENT HA ESTAT PROCESSAT, COMANDA NRE.: $orderId";
     } else {
-        $message = "NO PUDIMOS PROCESAR SU PAGO, POR FAVOR INTENTE MAS TARDE";
+        $message = "NO PODEM PROCESSAR EL SEU PAGAMENT, SI US PLAU INTENT MES TARDA";
     }
 } ?>
 
