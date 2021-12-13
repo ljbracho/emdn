@@ -1,0 +1,33 @@
+.actionclass{
+	width:210px;
+}
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #d2d6de;
+    border-radius: 0px;
+    height: 34px;
+}
+label.error{
+	color:red;
+}
+input.error{
+	border:1px solid red;
+}
+.table>thead:first-child>tr:first-child>th,table.table-bordered.dataTable tbody td  ,.table>tbody>tr>td, .table>tfoot>tr>td{ text-align: center; }
+.dash_heading{
+	position:absolute;
+	top: 0;
+	color:black;
+	left: 25%;
+}
+@media screen and (max-width: 768px) {
+  .dash_heading{
+	  position:unset;
+  }
+}
+
+
+.bg-pink{
+    background:#e82262;
+    color:white;
+}

@@ -1,2 +1,0 @@
-# emdn
-Botiga online 
