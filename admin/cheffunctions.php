@@ -325,13 +325,11 @@
 				<p>Els llibres es lliuraran el primer dia de classe</p>
 				<p>Moltes gràcies per confiar, una vegada més, en el projecte de l’escola.</b></p>";
 			}
-			;
+
+			$filename = "pdfs/" . $orderid . "-EMDN-Factura.pdf";
 
 
-			$filename = $orderid . "-EMDN-Factura.pdf";
-
-
-			$dompdf = new Dompdf();
+			@$dompdf = new Dompdf();
 			$options = $dompdf->getOptions();
 			$options->set(array('isRemoteEnabled' => true));
 			$dompdf->setOptions($options);
@@ -340,25 +338,26 @@
 			$dompdf->render();
 			//$dompdf->stream($filename.".pdf");
 			$output = $dompdf->output();
+			file_put_contents($filename, $output);
 			
 
 			$mail = new PHPMailer;
 			
-			//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+			//$mail->SMTPDebug = 3;
 			
-			$mail->isSMTP();                                      // Set mailer to use SMTP
-			$mail->Host = 'mail.emdn.cat ';  // Specify main and backup SMTP servers
-			$mail->SMTPAuth = true;                               // Enable SMTP authentication
-			$mail->Username = 'bracho.leandro.luz@gmail.com';                 // SMTP username
-			$mail->Password = 'hsegvmgdlclcshts';                           // SMTP password
-			$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-			$mail->Port = 587;                                    // TCP port to connect to
+			$mail->isSMTP();
+			$mail->Host = 'mail.emdn.cat';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'emdn_contacto@emdn.cat';
+			$mail->Password = ')CpcPPEg@yvi';
+			$mail->SMTPSecure = 'ssl';
+			$mail->Port = 465;
 			
 			$mail->setFrom($from, $fromName);
-			$mail->addAddress($order_email, $parent);              // Name is optional
+			$mail->addAddress($order_email, $parent);
 			$mail->addReplyTo($from, $fromName);
-			//$mail->addStringAttachment($output,$filename);  
-			$mail->isHTML(true);                                  // Set email format to HTML
+			$mail->addStringAttachment($output,$filename);
+			$mail->isHTML(true);
 			
 			$mail->Subject = $subject;
 			$mail->Body    = $msg;
