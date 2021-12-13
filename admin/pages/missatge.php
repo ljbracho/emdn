@@ -69,3 +69,119 @@ include('./connection.php');
           </div>
           
     </section>
+
+    
+<script src="bower_components/ckeditor/ckeditor5.js"></script>
+
+<script type="text/javascript">
+    ClassicEditor
+        .create(document.querySelector('#general_message'), {
+
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'link',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'outdent',
+                    'indent',
+                    '|',
+                    'imageUpload',
+                    'blockQuote',
+                    'insertTable',
+                    'mediaEmbed',
+                    'undo',
+                    'redo',
+                    'alignment',
+                    'fontBackgroundColor',
+                    'fontColor',
+                    'fontSize'
+                ]
+            },
+            language: 'es',
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells', 'tableProperties', 'tableCellProperties'
+                ]
+            },
+            licenseKey: '',
+        })
+        .then(editor => {
+            window.message = editor;
+        })
+        .catch(error => {
+            console.error('Oops, something went wrong!');
+            console.warn('Build id: p2xt4ajiinhw-fv9dvfh0os5b');
+            console.error(error);
+        });
+
+
+
+        ClassicEditor
+        .create(document.querySelector('#course_message'), {
+
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'link',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'outdent',
+                    'indent',
+                    '|',
+                    'imageUpload',
+                    'blockQuote',
+                    'insertTable',
+                    'mediaEmbed',
+                    'undo',
+                    'redo',
+                    'alignment',
+                    'fontBackgroundColor',
+                    'fontColor',
+                    'fontSize'
+                ]
+            },
+            language: 'es',
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells', 'tableProperties', 'tableCellProperties'
+                ]
+            },
+            licenseKey: '',
+        })
+        .then(editor => {
+            window.message = editor;
+        })
+        .catch(error => {
+            console.error('Oops, something went wrong!');
+            console.warn('Build id: p2xt4ajiinhw-fv9dvfh0os5b');
+            console.error(error);
+        });
+
+</script>

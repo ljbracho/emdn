@@ -7,7 +7,7 @@
     <section class="content">
 	<div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Afegir etapa</h3>
+              <h3 class="box-title">Afegir Modalidad</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -29,7 +29,7 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-                <button type="submit" name='sub' class="btn btn-primary">Afegir etapa</button>
+                <button type="submit" name='sub' class="btn btn-primary">Afegir Modalidad</button>
               </div>
             </form>
           </div>
