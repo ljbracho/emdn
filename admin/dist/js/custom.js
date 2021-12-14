@@ -232,6 +232,7 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 									{ "data": "iva" },
 									{ "data": "image" },
 								    { "data": "modalidad" },
+								    { "data": "orden" },
 									{ "data": "action_del_edit" }
 								],
 								"columnDefs": [ {
@@ -2185,13 +2186,18 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 						  $('#editorial').val(data.editorial);
 						  $('#pvp').val(data.pv_pmm);
 						  $('#pre_final').val(data.preu_final);
+						  $('#orden').val(data.orden);
 						  if(data.iva == '4%'){
 						      $('#iva4').prop('checked',true);
 						  }else if(data.iva == '21%'){
 						      $('#iva21').prop('checked',true);
 						  }
-						  
-						  
+								var modalcheck = JSON.parse(data.modality);
+								if (modalcheck != null) {
+								modalcheck.forEach(function(value, index) {
+									$('#modal' + value).prop('checked',true);
+								});
+							}
 						  if(data.obligatori == 'SI'){
 						      $('#obligatorisi').prop('checked',true);
 						  }else if(data.obligatori == 'NO'){

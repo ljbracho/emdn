@@ -700,16 +700,16 @@
 		$obligatori =  $_POST['obligatori'];
 		$modality =  json_encode($_POST['modalidad']);
 		$iva =  $_POST['iva'];
-
+		$orden = $_POST['orden'];
 		$pro_img = $_FILES['bookimage']['name'];
 		$pro_img_tmp = $_FILES['bookimage']['tmp_name'];
 		$folder = "uploads/" . $pro_img;
 		if ($pro_img != "") {
 			if (move_uploaded_file($pro_img_tmp, $folder)) {
-				$query = "INSERT INTO `products` (`book_name`, `course_id`, `obligatori`,`modality`,`iva`, `preu_final`, `isbn`, `editorial`, `image_name`, `description`) VALUES ('$bookname',$course_id, '$obligatori','$modality' ,'$iva', '$pre_final', '$isbn', '$editorial', '$pro_img', '$description');";
+				$query = "INSERT INTO `products` (`book_name`, `course_id`, `obligatori`,`modality`,`iva`, `preu_final`, `isbn`, `editorial`, `image_name`, `description`,`orden`) VALUES ('$bookname',$course_id, '$obligatori','$modality' ,'$iva', '$pre_final', '$isbn', '$editorial', '$pro_img', '$description','$orden');";
 			}
 		} else {
-			$query = "INSERT INTO `products` (`book_name`, `course_id`, `obligatori`,`modality`,`iva`, `preu_final`, `isbn`, `editorial`, `image_name`, `description`) VALUES ('$bookname',$course_id, '$obligatori','$modality','$iva', '$pre_final', '$isbn', '$editorial', '', '$description');";
+			$query = "INSERT INTO `products` (`book_name`, `course_id`, `obligatori`,`modality`,`iva`, `preu_final`, `isbn`, `editorial`, `image_name`, `description`,`orden`) VALUES ('$bookname',$course_id, '$obligatori','$modality','$iva', '$pre_final', '$isbn', '$editorial', '', '$description','$orden');";
 		}
 		$res = mysqli_query($con, $query);
 
@@ -741,7 +741,7 @@
 				## Search 
 				$searchQuery = " ";
 				if ($searchValue != '') {
-					$searchQuery = " and (total_price like '%" . $searchValue . "%' ) ";
+					$searchQuery = " and (total_price like '%" . $searchValue . "%' or name_std like '%". $searchValue. "%' or last_name_std like '%".$searchValue."%' or email like '%".$searchValue."%')  ";
 				}
 
 				## Total number of records without filtering
@@ -755,7 +755,7 @@
 				$totalRecordwithFilter = $records['allcount'];
 
 				## Fetch records
-				$empQuery = "select * from transection_history WHERE payment_status = 'paid' " . $searchQuery . "   order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
+				$empQuery = "select * from orders WHERE payment_status = 'paid' " . $searchQuery . "   order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
 				$empRecords = mysqli_query($con, $empQuery);
 				$data = array();
 
@@ -767,13 +767,10 @@
 						$payment_status = "<span class='label label-success'>Amount Paid</span>";
 						$style = "font-weight: bolder;color:green;font-size: 18px;";
 					}
-
-					$stname_data = mysqli_fetch_assoc(mysqli_query($con, "select * from orders where id = " . $row['order_id']));
-
 					$data[] = array(
 						"id" => "#TRANS-" . $row['id'],
-						"order_id" => "<span class='label label-default'>#ORD-" . $row['order_id'] . "</span>",
-						"std_name" => $stname_data['name_std'] . " " . $stname_data['last_name_std'],
+						"order_id" => "<span class='label label-default'>#ORD-" . $row['id'] . "</span>",
+						"std_name" => $row['name_std'] . " " . $row['last_name_std'],
 						"price" => "<b><span style='" . $style . "'> € " . number_format(cutAfterDot($row['total_price'], 2), 2) . "</span></b>",
 						"payment_method" => $row['payment_method'],
 						"payment_status" => $payment_status,
@@ -1100,6 +1097,19 @@
 					} else {
 						$img = "No image Yet!";
 					}
+					
+    $ids = json_decode($row['modality']);
+    $query = "select * from modalidad where id in (". implode(',',$ids) . ")";
+	$results = mysqli_query($con,$query);
+    if(mysqli_num_rows($results) > 0){
+		$modalidad = "<ul style='font-size: 11px;' align:right;>";
+        while($modal =  mysqli_fetch_assoc($results)){
+			$modalidad .= "<li>".$modal['modalidad']."</li>";
+		}
+		$modalidad .= "</ul>";
+	} else {
+		$modalidad = "---";
+	}
 					$data[] = array(
 						"id" => "#Lilbres" . $row['id'],
 						"book_name" => $row['book_name'],
@@ -1110,7 +1120,8 @@
 						"obligatori" => $row['obligatori'],
 						"iva" => $row['iva'],
 						"image" => $img,
-						"modalidad" => $row['modality'],
+						"modalidad" => $modalidad,
+						"orden" => $row['orden'],
 						"action_del_edit" => "<div class='actionclass' data-cat_id='" . $row['id'] . "'><button type='button'  class='btn bg-purple btn-edit'><i class='fa fa-edit'></i></button>
         				<input type='hidden' class='edit_cat_id' data-catid='" . $row['id'] . "'>
         				<button class='btn btn-danger btn-yes' type='button'><i class='fa fa-trash'></i></button> 
@@ -1566,6 +1577,7 @@
 				$pre_final = $_POST['pre_final'];
 				$modality = json_encode($_POST["modalidad"]);
 				$obligatori =  $_POST['obligatori'];
+				$orden =  $_POST['orden'];
 				$iva =  $_POST['iva'];
 
 				$pro_img = $_FILES['bookimage']['name'];
@@ -1573,10 +1585,10 @@
 				$folder = "uploads/" . $pro_img;
 				if ($pro_img != "") {
 					if (move_uploaded_file($pro_img_tmp, $folder)) {
-						$queryupdate = "Update `products` Set `modality` = '$modality', `book_name` = '$bookname', `course_id` = $course_id, `obligatori`='$obligatori', `iva` = '$iva', `preu_final` = '$pre_final', `isbn` = '$isbn', `editorial` = '$editorial', `image_name` = '$pro_img', `description`='$description' where id=$id";
+						$queryupdate = "Update `products` Set `modality` = '$modality', `book_name` = '$bookname', `course_id` = $course_id, `obligatori`='$obligatori', `iva` = '$iva', `preu_final` = '$pre_final', `isbn` = '$isbn', `editorial` = '$editorial', `image_name` = '$pro_img',`orden`='$orden', `description`='$description' where id=$id";
 					}
 				} else {
-					$queryupdate = "Update `products` Set `modality` = '$modality', `book_name` = '$bookname', `course_id` = $course_id, `obligatori`='$obligatori', `iva` = '$iva', `preu_final` = '$pre_final', `isbn` = '$isbn', `editorial` = '$editorial',`description`='$description' where id=$id";
+					$queryupdate = "Update `products` Set `modality` = '$modality', `book_name` = '$bookname', `course_id` = $course_id, `obligatori`='$obligatori', `iva` = '$iva', `preu_final` = '$pre_final', `isbn` = '$isbn', `editorial` = '$editorial',`orden`='$orden',`description`='$description' where id=$id";
 				}
 				break;
 			case "restaurant":

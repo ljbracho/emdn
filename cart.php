@@ -5,10 +5,10 @@ include 'admin/connection.php';
 if(isset($_GET['etapa']) && isset($_GET['course']) ){
     if(isset($_GET['modality'])){
         $modality = $_GET['modality'];
-         $query = "select * from products where modality like '%".$modality."%'";
+         $query = "select * from products where modality like '%".$modality."%' order by orden asc";
          $comunes = mysqli_query($con,$query);
     }
-    $query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = ".$_GET['course'];
+    $query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = ".$_GET['course']." order by orden asc";
     
     $etapaname = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `categorias` where id = ".$_GET['etapa']));
     $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  where course_id = ".$_GET['course']));

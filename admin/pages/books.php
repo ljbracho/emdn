@@ -20,6 +20,7 @@
                   <th>IVA</th>
                   <th>Imatge</th>
                   <th>Modalidad</th>
+                  <th>Orden</th>
                   <th>Acción</th>
                 </tr>
                 </thead>
@@ -174,7 +175,15 @@
 
                 </div>
 
-				
+				<div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+        <label for="pre_final">Orden</label>
+
+<input type="text"   name='orden'  class="form-control pre_final" id="orden" >
+
+        </div>
 
 				<div class='col-sm-12'>
 
