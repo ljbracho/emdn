@@ -104,7 +104,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                 $total_cart_price = 0;$pricetotal = 0;$ivaprice = 0;
                 if(mysqli_num_rows($comunes) > 0){
              while($book = mysqli_fetch_assoc($comunes)){
-                   
+                   $price = $book['preu_final'];
                    $percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
                    //  unset($_SESSION['cart']);
                    //  die;
@@ -153,7 +153,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
              <td><?php echo $book['book_name'];?></td>
               <td><?php echo $book['editorial'];?></td>
              <td>
-               <button type='button' data-price='<?php echo str_replace(",",".",$percentTotal);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
+               <button type='button' data-price='<?php echo str_replace(",",".",$price);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
               </td>
              <!--<td><?php  echo $book['pv_pmm'];?> €</td>-->
              <!--<td><?php  echo $book['preu_final'];?> €</td>-->
@@ -173,6 +173,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                      if(mysqli_num_rows($results) > 0){
                   while($book = mysqli_fetch_assoc($results)){
                         
+                   $price = $book['preu_final'];
                         $percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
                         //  unset($_SESSION['cart']);
                         //  die;
@@ -221,7 +222,7 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
                   <td><?php echo $book['book_name'];?></td>
                    <td><?php echo $book['editorial'];?></td>
                   <td>
-                    <button type='button' data-price='<?php echo str_replace(",",".",$percentTotal);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
+                    <button type='button' data-price='<?php echo str_replace(",",".",$price);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
                    </td>
                   <!--<td><?php  echo $book['pv_pmm'];?> €</td>-->
                   <!--<td><?php  echo $book['preu_final'];?> €</td>-->

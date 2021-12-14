@@ -55,7 +55,7 @@ include 'admin/connection.php';
                    $single = str_replace(",",".",$book['preu_final']);
                    $price_without_iva += $single;
                    $iva += $book['iva'];
-                   $ivaprice += ($single/100)*$book['iva'];
+                   $ivaprice = $single*1 + ($single/100)*$book['iva'];;
                    $total += $single*1 + ($single/100)*$book['iva'];
                     
                    if($book['obligatori'] == 'SI'){ 
@@ -85,14 +85,15 @@ include 'admin/connection.php';
                       <!--                      <i class="fa fa-plus"></i>-->
                       <!--                  </button>-->
                       <!--              </span></div>-->
-                                    <button type='button' data-price='<?php echo str_replace(",",".",($single + $ivaprice));?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
+                                    <button type='button' data-price='<?php echo $single;?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
                                 </td>
                 
                   <!--<td><?php  echo $book['preu_final'];?> €</td>-->
                   <!--<td><?php  echo $book['iva'];?> </td>-->
                    <td><?php
                         //$percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
-                        echo $single + $ivaprice;
+                        echo $ivaprice;
+                        //echo "<br>---asda---".$single*1 + ($single/100)*$book['iva'];
                   
                   ?> € </td>
                 </tr>
