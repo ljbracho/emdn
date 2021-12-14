@@ -245,7 +245,7 @@ function generatePdf($con, $orderid)
     $filename = "admin/pdfs/" . $orderid . "-EMDN-Factura.pdf";
 
 
-    @$dompdf = new Dompdf();
+    $dompdf = new Dompdf();
     $options = $dompdf->getOptions();
     $options->set(array('isRemoteEnabled' => true));
     $dompdf->setOptions($options);
