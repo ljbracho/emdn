@@ -6,6 +6,7 @@ date_default_timezone_set('Europe/Madrid');
 include ('admin/connection.php');
 include ('admin/dompdf/autoload.inc.php');
 include ('redsys/api.php');
+require 'PHPMailer-5.2/PHPMailerAutoload.php';
 
 use Dompdf\Dompdf;
 
@@ -254,6 +255,41 @@ function generatePdf($con, $orderid)
     //$dompdf->stream($filename.".pdf");
     $output = $dompdf->output();
     file_put_contents($filename, $output);
+    
+			$mail = new PHPMailer;
+			
+			//$mail->SMTPDebug = 3;
+            
+			$from = 'Emdn@emdn.cat';
+			$fromName = 'EMDN';
+			$subject = "Comanda llibres EMDN.";
+			
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'bracho.leandro.luz@gmail.com';
+			$mail->Password = 'hsegvmgdlclcshts';
+			$mail->SMTPSecure = 'ssl';
+			$mail->Port = 587;
+			
+			$mail->setFrom($from, $fromName);
+			$mail->addAddress($_SESSION['order_email'], $_SESSION['fathername']);
+			$mail->addReplyTo($from, $fromName);
+			$mail->addStringAttachment($output,$filename);
+			$mail->isHTML(true);
+			
+			$mail->Subject = $subject;
+			$mail->Body    = $msg;
+			$mail->AltBody = $msg;
+			
+			if(!$mail->send()) {
+				$response['error'] = true;
+				$response['error_msg'] = "error in email";
+				print_r(error_get_last());
+			} else {
+				$response['error'] = false;
+				$response['success_msg'] = "Insertado con éxito!";
+			}
 }
 
 function cutAfterDot($number, $afterDot = 2)
