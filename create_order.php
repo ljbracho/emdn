@@ -269,7 +269,7 @@ function generatePdf($con, $orderid)
 			$mail->SMTPAuth = true;
 			$mail->Username = 'bracho.leandro.luz@gmail.com';
 			$mail->Password = 'hsegvmgdlclcshts';
-			$mail->SMTPSecure = 'ssl';
+			$mail->SMTPSecure = 'tls';
 			$mail->Port = 587;
 			
 			$mail->setFrom($from, $fromName);
