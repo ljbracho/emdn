@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/Madrid');
 include ('admin/connection.php');
 include ('admin/dompdf/autoload.inc.php');
 include ('redsys/api.php');
-require 'PHPMailer-5.2/PHPMailerAutoload.php';
+require 'admin/PHPMailer-5.2/PHPMailerAutoload.php';
 
 use Dompdf\Dompdf;
 
