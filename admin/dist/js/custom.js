@@ -255,7 +255,7 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 									{ "data": "total_price" },
 									{ "data": "course" },
 									{ "data": "book_name" },
-									{ "data": "name_std " },
+									{ "data": "name_std" },
 									{ "data": "name_fth" },
 									{ "data": "id_card" },
 									{ "data": "email" },
