@@ -85,7 +85,7 @@ include 'admin/connection.php';
                       <!--                      <i class="fa fa-plus"></i>-->
                       <!--                  </button>-->
                       <!--              </span></div>-->
-                                    <button type='button' data-price='<?php echo str_replace(",",".",$ivaprice);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
+                                    <button type='button' data-price='<?php echo $single;?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $book['course_id'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa fa-check-circle'></i></button>
                                 </td>
                 
                   <!--<td><?php  echo $book['preu_final'];?> €</td>-->
