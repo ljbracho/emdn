@@ -2,7 +2,9 @@
      <div class="box">
          <div class="box-header">
              <h3 class="box-title">Transaccions i factures</h3>
-
+            <div class="box-tools pull-right">
+                <a target="_blank" href='download_all.php' class='btn btn-primary pull-right'>Descarregar tot</a>
+            </div>
          </div>
          <!-- /.box-header -->
          <div class="box-body">
