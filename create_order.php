@@ -58,7 +58,7 @@ if (isset($_POST['place_order']))
                 <input type='hidden' name='Ds_Signature' value='<?php echo $redsys->signature; ?>' />
             </form>
             <script type="text/javascript">
-                //document.getElementById('payment').submit();
+                document.getElementById('payment').submit();
             </script>
         <?php
     }
@@ -155,10 +155,10 @@ function generatePdf($con, $orderid)
     $fromName = 'EMDN';
     $subject = "Comanda llibres EMDN.";
     $htmlContent = '<!DOCTYPE html>
-        <html lang="en">
+        <html lang="es">
             <head>
                 <title>EMDN Comandes</title>
-                <meta charset="utf-8" />
+                <meta charset="iso-8859-1" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -167,8 +167,8 @@ function generatePdf($con, $orderid)
             <body style="background:white;font-size:11px">
                 <div style="margin:0 auto;width:100%;background:white;padding:12px">
                     <div style="margin-bottom:12px">
-                        <a href="http://www.emdnstore.es/" >
-                            <img src="http://www.emdnstore.es/assets/imgs/logo.jpg" style="width:170px;height:100px;" alt="" />
+                        <a href="http://botiga.emdn.cat/" >
+                            <img src="http://botiga.emdn.cat/assets/imgs/logo.jpg" style="width:170px;height:100px;" alt="" />
                         </a>
                     </div>
                     <p style="color:black;"><b>LLIBRES DE TEXT I MATERIAL INDIVIDUAL PER AL CURS ' . date("Y") . "-" . date('Y', strtotime('+1 year')) . '</b></p>
@@ -242,10 +242,15 @@ function generatePdf($con, $orderid)
 
     $filename = "admin/pdfs/" . $orderid . "-EMDN-Factura.pdf";
 
-
     $dompdf = new Dompdf();
     $options = $dompdf->getOptions();
-    $options->set(array('isRemoteEnabled' => true));
+    $options->set([
+        'isRemoteEnabled' => true,
+        'debugLayoutLines' => false,
+        'debugLayoutBlocks' => false,
+        'debugLayoutInline' => false,
+        'debugLayoutPaddingBox' => false
+    ]);
     $dompdf->setOptions($options);
     $dompdf->loadHtml($htmlContent);
     $dompdf->setPaper('A4', 'verti');
@@ -280,14 +285,16 @@ function generatePdf($con, $orderid)
     $mail->Body    = $msg;
     $mail->AltBody = $msg;
     
-    if(!$mail->send()) {
+    $mail->send();
+
+    /* if(!$mail->send()) {
         $response['error'] = true;
         $response['error_msg'] = "error in email";
-        print_r(error_get_last());
     } else {
         $response['error'] = false;
         $response['success_msg'] = "Insertado con éxito!";
     }
+    print_r($response); */
 }
 
 function cutAfterDot($number, $afterDot = 2)
