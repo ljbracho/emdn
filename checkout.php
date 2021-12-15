@@ -10,22 +10,16 @@ include 'admin/connection.php';
                 </div>
     </div>
     <div class='wrapper_trans mb-3'>
-        <?php if(!isset($_SESSION['cart'])){ ?>
-        <p> <i class='fa fa-shopping-cart'></i>  La vostra cistella encara està buida! <a href='index.php'> Anar a casa </a></p>
-        <?php }else{
-        if(count($_SESSION['cart']) == 0){
-        ?>
+        
         <div class="mb-3 p-3" style='background: #ffffffc2;'>
         <p class='text-center text-danger m-0 '><b> <i class='fa fa-shopping-cart'></i>  La vostra cistella encara està buida! <a href='index.php'> Anar a casa </a></b></p>
         </div>
-        <?php }else{ ?>
         <div class="mb-3 p-2" style='background: #ffffffc2;'>
             <?php
                   $total = 0 ;$price_without_iva=0;$iva=0;
-                  foreach($_SESSION['cart'] as  $key => $cartCourses){
-                    $ids = array_column($cartCourses, 'book_id');
+                    $ids = explode(',',$_POST['ids']);
                     echo var_dump($cartCourses);
-                      $coursname = mysqli_fetch_assoc(mysqli_query($con,"select courses.*,categorias.cat_name from courses join categorias on categorias.id = courses.etpa where courses.id =  ".$key));
+                      $coursname = mysqli_fetch_assoc(mysqli_query($con,"select courses.*,categorias.cat_name from courses join categorias on categorias.id = courses.etpa where courses.id =  ".$_POST["curso"]));
                   ?>
                 <div class='row'>
                     <div class='col-sm-8'>
@@ -102,9 +96,7 @@ include 'admin/connection.php';
                <?php } ?>
               </tbody>
         </table>
-        <?php } ?>
         </div>
-        <?php } } ?>
         <form action="create_order.php" method='post' class='mb-3'>
         <div class='row'>
             <div class="col-sm-5">
@@ -177,7 +169,7 @@ include 'admin/connection.php';
                  <div class='col-sm-2 text-dark'>
                      <!--<p class='m-0'><span id='final_price'> <?php echo $price_without_iva;?></span> €</p>-->
                      <!--<small><span id='iva'><?php echo $ivaprice;?></span></small>-->
-                     <input type='hidden' name='total_price' class='total' value='<?php echo number_format($price_without_iva,2,".","") ;?>'>
+                     <input type='hidden' name='total_price' class='total' value='<?php echo number_format($total,2,".","") ;?>'>
                      <input type='hidden' name='monto' class='total' value='<?php echo number_format($price_without_iva,2,".","") ;?>'>
                      <input type='hidden' name='descrip' value='PAGO ONLINE'>
                      <p><b><span class='total_price' id='tot'><?php echo number_format($total,2,".","") ;?></span> €</b></p>
@@ -185,6 +177,8 @@ include 'admin/connection.php';
              </div>
        </div>
        
+       <input type="text" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
+         <input type="text" name="curso" id="curso" value="<?= $_POST['curso'] ?>">
        <div class="wrapper_trans mb-5">
          <input type='submit' class='btn btn-pink float-right' name='place_order' value='PAGAR'>
          <!--<a href='index.php' class='btn btn-gray float-right mr-3'>SEGUIR COMPRANT</a>-->

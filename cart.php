@@ -62,6 +62,7 @@ opacity: 0.7;
 
 
 <div class="section">
+    <form action="checkout.php" method="post" name="form1">
     <div class="container mt-5 mb-3">
         <div class="col-sm-12 text-center mb-3">
                     <img src="assets/imgs/Logo-EMDN.png" class='logo_web'>
@@ -130,7 +131,7 @@ opacity: 0.7;
                     $results = mysqli_query($con,$query);
                      if(mysqli_num_rows($results) > 0){
                   while($book = mysqli_fetch_assoc($results)){
-                        
+                        $ids[] =  $book['id'];
                    $price = $book['preu_final'];
                         $percentTotal = round((($book['preu_final']/100)*$book['iva']) + $book['preu_final'], 2) ;
                         //  unset($_SESSION['cart']);
@@ -140,28 +141,7 @@ opacity: 0.7;
                             $pricetotal += $preu_final;
                             $ivaprice += ($preu_final/100)*$book['iva'];
                             $total_cart_price +=$percentTotal;
-                            if(!isset($_SESSION['cart'])){
-                                $_SESSION['cart'] = array();
-                            }
-                             $book_id = $book['id'];
-                             $course_id = $course['id'];
-                             $qty = 1;
-                            // add new item on array
-                            $cart_item=array(
-                                'book_id'=>$book_id,
-                                'quantity'=>$qty
-                            );
                             
-                            if(array_key_exists($course_id, $_SESSION['cart'])){
-                                    if(array_search($book_id, array_column($_SESSION['cart'][$course_id], 'book_id')) !== FALSE){
-                                        /// leave
-                                    }else{
-                                      $_SESSION['cart'][$course_id][]=$cart_item;
-                                    }
-                                    
-                            }else{
-                                $_SESSION['cart'][$course_id][]=$cart_item;
-                            }
                         
                        $carrrt = "fa-check-circle";
                        if($book['obligatori'] == 'SI'){
@@ -220,9 +200,13 @@ opacity: 0.7;
          
         </div>
      <div class="wrapper_trans mb-5">
-         <a href='checkout.php' class='btn btn-pink float-right'>PAGAR</a>
+         <input type="text" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
+         <input type="text" name="curso" id="curso" value="<?= $_GET['course'] ?>">
+         <button type="submit" class='btn btn-pink float-right'>PAGAR</button>
+         <a href='checkout.php'>PAGAR</a>
          <!--<a href='index.php' class='btn btn-gray float-right mr-3'>SEGUIR COMPRANT</a>-->
      </div>
+     </form>
 </div>
 
 

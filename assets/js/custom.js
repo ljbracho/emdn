@@ -152,8 +152,18 @@ $(document).ready(function(){
             $('.total_price').html((total - bookprice).toFixed(2));
             $('.total').val((total - bookprice).toFixed(2));
        }
+       marcar(bookid);
        
-       
+    if(qty == 1){
+        ele.html('<i class="fa fa-check-circle"></i>');
+        ele.attr('data-qty',0);
+    }else{
+        ele.html('<i class="fa fa-shopping-cart"></i>');
+        ele.attr('data-qty',1);
+    }
+    
+   ele.prop('disabled',false);
+    /*
        $.ajax({
                 url: 'All_Functions.php',
                 dataType: 'json',
@@ -182,7 +192,7 @@ $(document).ready(function(){
                 error: function(x, e) {
     
                 }
-            });
+            });*/
    })
     
     var activeurl = window.location;
@@ -270,3 +280,16 @@ $(document).ready(function(){
     });
     
 }); 
+
+function marcar(bookid) {
+    
+    var book_ids = [];
+    var book_ids = $("#ids").val().split(',');
+    var check = book_ids.indexOf(bookid);
+    if (check < 0) {
+     book_ids.push(bookid);
+     } else {
+         book_ids.splice(check, 1);
+     }
+ $("#ids").val(book_ids.join(','));
+}
