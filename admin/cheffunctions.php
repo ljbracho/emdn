@@ -775,7 +775,7 @@
 						"payment_method" => $row['payment_method'],
 						"payment_status" => $payment_status,
 						"datetime" => date("d M Y h:i A", strtotime($row['date_time'])),
-						"action_del_edit" => "<div data-cat_id='" . $row['id'] . "'><button type='button' class='btn btn-primary get_book_details' data-orderid='" . $row['order_id'] . "' title='Factura'><i class='fa fa-files-o'></i></button>
+						"action_del_edit" => "<div data-cat_id='" . $row['id'] . "'><button type='button' class='btn btn-primary get_book_details' data-orderid='" . $row['id'] . "' title='Factura'><i class='fa fa-files-o'></i></button>
 				<input type='hidden' class='edit_cat_id' data-catid='" . $row['id'] . "'>
 				<button type='button' class='btn btn-primary btn-edit'><i class='fa fa-edit'></i></button>
 			<button class='btn btn-danger btn-yes' type='button'><i class='fa fa-trash'></i></button> 
