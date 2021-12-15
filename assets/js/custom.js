@@ -4,6 +4,8 @@
 //     });
 
 $(document).ready(function(){
+
+    $('#blocker').hide();
   $(document).on('change','.etapa',function(){
       var etapa =  $(this).val();
       $('.course').empty().append('<option value="0" selected disabled >Seleccionar Curs</option>');  
@@ -158,9 +160,11 @@ $(document).ready(function(){
                 type: 'POST',
                 data: {"bookid": bookid,'action':'add_to_cart',qty:qty,courseid:courseid},
                 beforeSend:function(){
+                    $('#blocker').show();
                     ele.html('<i class="fa fa-spin fa-spinner"></i>');
                 },
                 success: function(response) {
+                    
                     // ele.removeClass('btn-cart-icon');
                     // ele.addClass('btn-added-icon');
                     if(qty == 1){
@@ -173,6 +177,7 @@ $(document).ready(function(){
                     
                    $('.item_count').text(response.total_items);
                    ele.prop('disabled',false);
+                   $('#blocker').hide();
                 },
                 error: function(x, e) {
     

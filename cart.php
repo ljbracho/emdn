@@ -1,7 +1,10 @@
 <?php 
 include('header.php');
 include 'admin/connection.php';
-
+session_start();
+if(!isset($_SESSION['cart'])){
+    $_SESSION['cart'] = array();
+}
 if(isset($_GET['etapa']) && isset($_GET['course']) ){
     if(isset($_GET['modality'])){
         $modality = $_GET['modality'];
@@ -32,7 +35,31 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
     // die;
 }
 ?>
+<style type="text/css">
+#blocker {
+position: fixed;
+top: 0px;
+left: 0px;
+height:100%;
+width:100%;        /* hacemos que ocupe toda la pantalla a cualquier resolución*/
+z-index: 50;       /* lo colocamos por encima del resto de componentes*/
+background: white;  /*Color de fondo semitransparente*/
+opacity: 0.7;
+}
 
+#cargador{
+    position:absolute;
+    top:50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+</style>
+<div id="blocker">
+    <div id="cargador">
+<i class="fa fa-spin fa-spinner"></i>
+</div>
+</div>
 
 
 
