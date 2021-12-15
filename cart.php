@@ -200,10 +200,9 @@ opacity: 0.7;
          
         </div>
      <div class="wrapper_trans mb-5">
-         <input type="text" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
-         <input type="text" name="curso" id="curso" value="<?= $_GET['course'] ?>">
+         <input type="hidden" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
+         <input type="hidden" name="curso" id="curso" value="<?= $_GET['course'] ?>">
          <button type="submit" class='btn btn-pink float-right'>PAGAR</button>
-         <a href='checkout.php'>PAGAR</a>
          <!--<a href='index.php' class='btn btn-gray float-right mr-3'>SEGUIR COMPRANT</a>-->
      </div>
      </form>

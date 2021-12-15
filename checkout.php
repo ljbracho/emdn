@@ -11,14 +11,10 @@ include 'admin/connection.php';
     </div>
     <div class='wrapper_trans mb-3'>
         
-        <div class="mb-3 p-3" style='background: #ffffffc2;'>
-        <p class='text-center text-danger m-0 '><b> <i class='fa fa-shopping-cart'></i>  La vostra cistella encara està buida! <a href='index.php'> Anar a casa </a></b></p>
-        </div>
         <div class="mb-3 p-2" style='background: #ffffffc2;'>
             <?php
                   $total = 0 ;$price_without_iva=0;$iva=0;
                     $ids = explode(',',$_POST['ids']);
-                    echo var_dump($cartCourses);
                       $coursname = mysqli_fetch_assoc(mysqli_query($con,"select courses.*,categorias.cat_name from courses join categorias on categorias.id = courses.etpa where courses.id =  ".$_POST["curso"]));
                   ?>
                 <div class='row'>
@@ -99,15 +95,14 @@ include 'admin/connection.php';
         </div>
         <form action="create_order.php" method='post' class='mb-3'>
         <div class='row'>
-            <div class="col-sm-5">
+            <div class="col-sm-6">
                  <div class="form-group">
                     <input type="text" class="form-control checkout-input-box" required name='stdname' id="username" aria-describedby="emailHelp" placeholder="Nom de l'alumne/a">
                   </div>
-                 
+                  
                  <div class="form-group">
                     <input type="text" class="form-control checkout-input-box" id="dni" required name='dni' aria-describedby="emailHelp" placeholder="DNI pare o mare">
                   </div>
-                  
                   <!--<div class="form-group">-->
                   <!--  <input type="text" class="form-control checkout-input-box" id="curs" required name='curs' aria-describedby="emailHelp" placeholder="CURS">-->
                   <!--</div>-->
@@ -116,8 +111,11 @@ include 'admin/connection.php';
                   </div>
                 
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-6">
                 
+            <div class="form-group">
+                    <input type="text" class="form-control checkout-input-box" id="stdlastname" required name='stdlastname' aria-describedby="emailHelp" placeholder="cognom de l'alumne/a">
+                  </div>
                 <div class="form-group">
                     <input type="text" class="form-control checkout-input-box" id="exampleInputEmail1" required name='nom' aria-describedby="emailHelp" placeholder="Nom del pare o mare">
                   </div>
@@ -177,8 +175,8 @@ include 'admin/connection.php';
              </div>
        </div>
        
-       <input type="text" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
-         <input type="text" name="curso" id="curso" value="<?= $_POST['curso'] ?>">
+       <input type="hidden" name="ids" id="ids" class="form-control" value="<?= implode(',',$ids) ?>">
+         <input type="hidden" name="curso" id="curso" value="<?= $_POST['curso'] ?>">
        <div class="wrapper_trans mb-5">
          <input type='submit' class='btn btn-pink float-right' name='place_order' value='PAGAR'>
          <!--<a href='index.php' class='btn btn-gray float-right mr-3'>SEGUIR COMPRANT</a>-->

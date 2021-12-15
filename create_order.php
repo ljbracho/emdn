@@ -13,6 +13,7 @@ use Dompdf\Dompdf;
 if (isset($_POST['place_order']))
 {
     $stdname = $_POST['stdname'];
+    $stdlastname = $_POST['stdlastname'];
     $dni = $_POST['dni'];
     //$curs = $_POST['curs'];
     $fthername = $_POST['nom'];
@@ -27,26 +28,21 @@ if (isset($_POST['place_order']))
     $_SESSION['dni'] = $dni;
     $_SESSION['fathername'] = $fthername;
 
-    $course = $_SESSION['course_name'];
+    $course = $_POST['curso'];
     $date = date('Y-m-d h:i:s');
-
-    $query_insert = "INSERT INTO `orders` (`total_price`,`date_time`,`name_std`, `name_fth`, `id_card`, `email`, `course`, `contact_number`, `payment_method`) VALUES ('$total_price','$date','$stdname', '$fthername', '$dni', '$email', '$course', '$phone', '$payment_method');";
+    $ids = explode(',',$_POST['ids']);
+    $query_insert = "INSERT INTO `orders` (`total_price`,`date_time`,`name_std`, `name_fth`, `id_card`, `email`, `course`, `contact_number`, `payment_method`, `last_name_std`) VALUES ('$total_price','$date','$stdname', '$fthername', '$dni', '$email', '$course', '$phone', '$payment_method','$stdlastname');";
 
     if (mysqli_query($con, $query_insert))
     {
         $orderid = mysqli_insert_id($con);
         $_SESSION['order_id'] = $orderid;
 
-        foreach ($_SESSION['cart'] as $key => $cart)
-        {
-            foreach ($cart as $item)
+            foreach ($ids as $item)
             {
-                $qty = $item['quantity'];
-                $book_id = $item['book_id'];
-                $query_detail = "INSERT INTO `order_details` (`product_id`, `order_id`, `count`) VALUES ('$book_id','$orderid', '$qty');";
+                $query_detail = "INSERT INTO `order_details` (`product_id`, `order_id`, `count`) VALUES ('$item','$orderid', '1');";
                 mysqli_query($con, $query_detail);
             }
-        }
 
         $query_transaction = mysqli_query($con, "INSERT INTO `transection_history` (`order_id`, `total_price`, `payment_method`, `payment_status`, `pdf_invoice`, `date_time`, `token`) VALUES ('$orderid', '$total_price', 'Direct Bank', 'pending','admin/pdfs/$orderid-EMDN-Factura.pdf', NOW(), '');");
         $redsys = preparePOS($total_price, $redsysParams);
@@ -76,6 +72,7 @@ if (isset($_POST['place_order']))
 }
 else
 {
+    die("asdas");
     header('location: index.php');
 }
 

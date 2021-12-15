@@ -255,19 +255,7 @@ $(document).ready(function(){
 		   confirmButtonText: 'si, esborra-ho',
 		   preConfirm: function() {
 			  return new Promise(function(resolve) {
-				  $.ajax({
-					 url: 'All_Functions.php' ,
-					 type: 'POST',
-					 data: {course:course,'action':'remove_course'},
-					 dataType: 'json'
-				  })
-				  .done(function(response){
-						//swal.fire('Removed!', response.msg, 'success');
-						location.reload(true); 
-						})
-				  .fail(function(){
-					 swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
-				  });
+                location.href = "/";
 			  });
 		   },
 		   allowOutsideClick: false     
