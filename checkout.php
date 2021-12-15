@@ -23,6 +23,7 @@ include 'admin/connection.php';
             <?php
                   $total = 0 ;$price_without_iva=0;$iva=0;
                   foreach($_SESSION['cart'] as  $key => $cartCourses){
+                    $ids = array_column($cartCourses, 'book_id');
                       $coursname = mysqli_fetch_assoc(mysqli_query($con,"select courses.*,categorias.cat_name from courses join categorias on categorias.id = courses.etpa where courses.id =  ".$key));
                   ?>
                 <div class='row'>
@@ -48,15 +49,15 @@ include 'admin/connection.php';
               <tbody>
                   <?php
                   
-                  foreach($cartCourses as $single_book){
-                      $books = "select * from products where id = ".$single_book['book_id'];
-                      $book = mysqli_fetch_assoc(mysqli_query($con,$books));
+                      $books = "select * from products where id in (".implode(",",$ids).") order by orden asc";
+                      $results = mysqli_query($con,$books);
+                      while($book = mysqli_fetch_assoc($results)) {
                   //while($book = mysqli_fetch_assoc($results)){
                    $single = str_replace(",",".",$book['preu_final']);
                    $price_without_iva += $single;
                    $iva += $book['iva'];
-                   $ivaprice = $single*1 + ($single/100)*$book['iva'];;
-                   $total += $single*1 + ($single/100)*$book['iva'];
+                   $ivaprice = round($single*1 + ($single/100)*$book['iva'] , 2);
+                   $total += $ivaprice;
                     
                    if($book['obligatori'] == 'SI'){ 
                             $addcart="";

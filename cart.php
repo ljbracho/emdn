@@ -8,11 +8,10 @@ if(!isset($_SESSION['cart'])){
 if(isset($_GET['etapa']) && isset($_GET['course']) ){
     if(isset($_GET['modality'])){
         $modality = $_GET['modality'];
-         $query = "select * from products where modality like '%".$modality."%' order by orden asc";
-         $comunes = mysqli_query($con,$query);
+         $query = "select * from products where modality like '%".$modality."%' union ";
     }
-    $query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = ".$_GET['course']." order by orden asc";
-    
+    $query .= "select * from products    where course_id = ".$_GET['course']." order by orden asc";
+    echo $query;
     $etapaname = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `categorias` where id = ".$_GET['etapa']));
     $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  where course_id = ".$_GET['course']));
     $modal = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `modalidad`  where id = ".$_GET['modality']));
@@ -129,79 +128,12 @@ opacity: 0.7;
                 //       $book = mysqli_fetch_assoc(mysqli_query($con,$books));
                 
                 $total_cart_price = 0;$pricetotal = 0;$ivaprice = 0;
-                if(mysqli_num_rows($comunes) > 0){
-             while($book = mysqli_fetch_assoc($comunes)){
-                   $price = $book['preu_final'];
-                   $percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
-                   //  unset($_SESSION['cart']);
-                   //  die;
-                    
-                       $preu_final = str_replace(",",".",$percentTotal);
-                       $pricetotal += $preu_final;
-                       $ivaprice += ($preu_final/100)*$book['iva'];
-                       $total_cart_price +=$percentTotal;
-                       if(!isset($_SESSION['cart'])){
-                           $_SESSION['cart'] = array();
-                       }
-                        $book_id = $book['id'];
-                        $course_id = $course['id'];
-                        $qty = 1;
-                       // add new item on array
-                       $cart_item=array(
-                           'book_id'=>$book_id,
-                           'quantity'=>$qty
-                       );
-                       
-                       if(array_key_exists($course_id, $_SESSION['cart'])){
-                               if(array_search($book_id, array_column($_SESSION['cart'][$course_id], 'book_id')) !== FALSE){
-                                   /// leave
-                               }else{
-                                 $_SESSION['cart'][$course_id][]=$cart_item;
-                               }
-                               
-                       }else{
-                           $_SESSION['cart'][$course_id][]=$cart_item;
-                       }
-                   
-                  $carrrt = "fa-check-circle";
-                  if($book['obligatori'] == 'SI'){
-                       
-                       $addcart="";
-                       $disable = "disabled";
-                   }else{
-                       //$carrrt = "fa-shopping-cart";
-                       $addcart="btn-cart-icon";
-                       $disable = "";
-                   } 
-             
-             ?>
-           <tr>
-             <th scope="row"><?php echo $book['isbn'];?></th>
-             <td><?php echo $book['book_name'];?></td>
-              <td><?php echo $book['editorial'];?></td>
-             <td>
-               <button type='button' data-price='<?php echo str_replace(",",".",$price);?>' data-iva='<?php echo str_replace("%","",$book['iva']);?>' data-bookid='<?php echo $book['id'];?>' data-courseid='<?php echo $_GET['course'];?>' data-qty='0' class='btn btn-pink-cart <?php echo $addcart;?>' <?php echo $disable;?>><i class='fa <?php echo $carrrt;?>'></i></button>
-              </td>
-             <!--<td><?php  echo $book['pv_pmm'];?> €</td>-->
-             <!--<td><?php  echo $book['preu_final'];?> €</td>-->
-            
-             <!--<td><?php  echo $book['iva'];?></td>-->
-             <!--<td><?php echo $book['obligatori'];?></td>-->
-              <td><?php
-                   
-                   echo $percentTotal; //$percentTotal;
-             
-             ?> €</td>
-             
-           </tr>
-          <?php }
-                }
                     $results = mysqli_query($con,$query);
                      if(mysqli_num_rows($results) > 0){
                   while($book = mysqli_fetch_assoc($results)){
                         
                    $price = $book['preu_final'];
-                        $percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
+                        $percentTotal = round((($book['preu_final']/100)*$book['iva']) + $book['preu_final'], 2) ;
                         //  unset($_SESSION['cart']);
                         //  die;
                          
