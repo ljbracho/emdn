@@ -24,6 +24,7 @@ include 'admin/connection.php';
                   $total = 0 ;$price_without_iva=0;$iva=0;
                   foreach($_SESSION['cart'] as  $key => $cartCourses){
                     $ids = array_column($cartCourses, 'book_id');
+                    echo var_dump($cartCourses);
                       $coursname = mysqli_fetch_assoc(mysqli_query($con,"select courses.*,categorias.cat_name from courses join categorias on categorias.id = courses.etpa where courses.id =  ".$key));
                   ?>
                 <div class='row'>
