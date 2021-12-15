@@ -119,10 +119,10 @@
 
 		if (isset($_POST['modality'])) {
 			$modality = $_POST['modality'];
-			$query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = " . $_POST['course_id'] . " AND modality = '" . $modality . "'";
-		} else {
-			$query = "select products.*,courses.course_name from products join courses on courses.id = products.course_id  where course_id = " . $_POST['course_id'];
+         $query = "select * from products where modality like '%".$modality."%' union ";
 		}
+		$query .= "select * from products where course_id = ".$_POST['course_id']." order by orden asc";
+		
 
 		$results = mysqli_query($con, $query);
 
@@ -139,7 +139,7 @@
 			$response['books'] = $book;
 		} else {
 
-			$response['error'] =  false;
+			$response['error'] =  true;
 			$response['msg'] = 'Books not available';
 			$response['books'] = array();
 		}
@@ -176,6 +176,34 @@
 		echo json_encode($response);
 		die;
 	}
+
+
+	
+if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
+    
+    $query = "select * from courses where id = ".$_POST['curso'];
+    $results = mysqli_query($con,$query);
+    $curso = mysqli_fetch_assoc($results);
+    $ids = json_decode($curso['modalidad']);
+    $query = "select * from modalidad where id in (". implode(',',$ids) . ")";
+    $results = mysqli_query($con,$query);
+    if(mysqli_num_rows($results) > 0){
+        while($row =  mysqli_fetch_assoc($results)){
+            $modals[] = $row;
+        }
+        $response['error'] =  false;
+        $response['msg'] = 'course available';
+        $response['modals'] = $modals;
+    }else{
+        $response['error'] =  true;
+        $response['msg'] = 'No Course Exists';
+        
+    }
+    
+    echo json_encode($response);
+    die;
+
+}
 
 	// add category
 

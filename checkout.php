@@ -48,7 +48,7 @@ include 'admin/connection.php';
                    $price_without_iva += $single;
                    $iva += $book['iva'];
                    $ivaprice = round($single*1 + ($single/100)*$book['iva'] , 2);
-                   $total += $ivaprice;
+                   $total += $single;
                     
                    if($book['obligatori'] == 'SI'){ 
                             $addcart="";
@@ -84,7 +84,7 @@ include 'admin/connection.php';
                   <!--<td><?php  echo $book['iva'];?> </td>-->
                    <td><?php
                         //$percentTotal = (($book['preu_final']/100)*$book['iva']) + $book['preu_final'] ;
-                        echo $ivaprice;
+                        echo $single;
                         //echo "<br>---asda---".$single*1 + ($single/100)*$book['iva'];
                   
                   ?> € </td>

@@ -1871,24 +1871,26 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 	
 	
 	$(document).on("change",'#course_order_id',function(e){
-	    
-	    if($('#course_order_id option:selected').val() == "17"){
-	       
-	        var option = "<option value=''>seleccionar Modalitat</option> <option value='Itinerari Científic'>Itinerari Científic</option> <option value='Itinerari Social'>Itinerari Social</option> <option value='Itinerari Humanístic'>Itinerari Humanístic</option>";
-	        $('#modality').html(option);
-	         $('.modality_box').show();
-	    }else if($('#course_order_id option:selected').val() == "18"){
-	        
-	        var option = "<option value=''>seleccionar Modalitat</option> <option value='Modalitat: Científic'>Modalitat: Científic</option> <option value='Modalitat: Tecnològic'>Modalitat: Tecnològic</option> <option value='Modalitat: Ciències Socials'>Modalitat: Ciències Socials</option><option value='Modalitat: Humanitats'>Modalitat: Humanitats</option><option value='Modalitat: Artístic'>Modalitat: Artístic</option>";
-	        $('#modality').html(option);
-	         $('.modality_box').show();
-	    }else if($('#course_order_id option:selected').val() == "19"){
-	       
-	         var option = "<option value=''>seleccionar Modalitat</option> <option value='Modalitat: Científic'>Modalitat: Científic</option> <option value='Modalitat: Tecnològic'>Modalitat: Tecnològic</option> <option value='Modalitat: Ciències Socials'>Modalitat: Ciències Socials</option><option value='Modalitat: Humanitats'>Modalitat: Humanitats</option><option value='Modalitat: Artístic'>Modalitat: Artístic</option>";
-	        $('#modality').html(option);
-	         $('.modality_box').show();
-	    }else{
-	        $('.modality_box').hide();
+		$('#modality').empty().append('<option value="0" selected disabled >Seleccionar Modalidad / Itinerario</option>'); 
+		var curso =  $(this).val();
+		$('.box-books').hide();
+	    $.ajax({
+			url: 'cheffunctions.php',
+			dataType: 'json',
+			type: 'POST',
+			data: {"curso": curso,'action':'get_modal'},
+			success: function(response) {
+				console.log(response);
+			  var array = response.modals;
+			  if (!response.error)
+			  {
+				for (i in array) {     
+				 $("#modality").append("<option value="+array[i].id+">"+array[i].modalidad+"</option>");
+			   }
+			   $('#modality_box').show();
+			  } else{
+				$('#modality_box').hide();
+				
 	            var course_id  = $('#course_order_id').val();
 	            var etapa  = $('#etpa').val();
 	             $.ajax({
@@ -1942,7 +1944,15 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 	                    
 						}
 	             });
-	    }
+			}
+	
+			},
+			error: function(x, e) {
+	
+			}
+	
+		});
+		
 	    
 	});
 	

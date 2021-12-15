@@ -137,7 +137,7 @@ opacity: 0.7;
                         //  unset($_SESSION['cart']);
                         //  die;
                          
-                            $preu_final = str_replace(",",".",$percentTotal);
+                            $preu_final = str_replace(",",".",$price);
                             $pricetotal += $preu_final;
                             $ivaprice += ($preu_final/100)*$book['iva'];
                             $total_cart_price +=$percentTotal;
@@ -169,7 +169,7 @@ opacity: 0.7;
                   <!--<td><?php echo $book['obligatori'];?></td>-->
                    <td><?php
                         
-                        echo $percentTotal; //$percentTotal;
+                        echo $price; //$percentTotal;
                   
                   ?> €</td>
                   

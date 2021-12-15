@@ -26,7 +26,7 @@ include('./connection.php');
 
             <div class="box-body">
 
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
 
                     <div class="form-group">
                         <label for="etpa">Seleccionar etapa</label>
@@ -41,7 +41,7 @@ include('./connection.php');
                         </select>
                     </div>
                 </div>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
 
                     <div class="form-group">
 
@@ -54,7 +54,7 @@ include('./connection.php');
 
                 </div>
 
-                <div class='col-sm-4 modality_box' style='display:none'>
+                <div class='col-sm-3 modality_box' id="modality_box"  style='display:none'>
 
                     <div class="form-group">
 
@@ -66,7 +66,7 @@ include('./connection.php');
 
                 </div>
 
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
 
                     <div class="form-group">
 

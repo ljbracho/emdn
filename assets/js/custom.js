@@ -130,7 +130,7 @@ $(document).ready(function(){
         var courseid = $(this).attr('data-courseid');
        var price = Number($(this).attr('data-price'));
         var iva = Number($(this).attr('data-iva'));
-       var bookprice = price + (price/100)*iva;
+       var bookprice = price ;
        console.log("bookprice " + bookprice);
        var ivapercentage = (price/100)*iva;
        //console.log(bookprice);
