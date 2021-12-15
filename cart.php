@@ -11,7 +11,6 @@ if(isset($_GET['etapa']) && isset($_GET['course']) ){
          $query = "select * from products where modality like '%".$modality."%' union ";
     }
     $query .= "select * from products    where course_id = ".$_GET['course']." order by orden asc";
-    echo $query;
     $etapaname = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `categorias` where id = ".$_GET['etapa']));
     $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  where course_id = ".$_GET['course']));
     $modal = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `modalidad`  where id = ".$_GET['modality']));
