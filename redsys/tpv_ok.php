@@ -33,6 +33,7 @@ if ($originalSignature === $receivedSignature && $decodec->Ds_Order === $orderId
         $order = mysqli_fetch_assoc($order);
         mysqli_query($con, "UPDATE `orders_redsys` SET `approved` = 1 WHERE `id` = " . $order['id']);
         mysqli_query($con, "UPDATE `orders` SET `payment_status` = 'paid' WHERE `id` = " . $order['order_id']);
+        mysqli_query($con, "UPDATE `transection_history` SET `payment_status` = 'paid' WHERE `order_id` = " . $order['order_id']);
         $message = "EL SEU PAGAMENT HA ESTAT PROCESSAT, COMANDA NRE.: $orderId";
     } else {
         $message = "NO PODEM PROCESSAR EL SEU PAGAMENT, SI US PLAU INTENT MES TARDA";

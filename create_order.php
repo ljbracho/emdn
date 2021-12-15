@@ -38,11 +38,11 @@ if (isset($_POST['place_order']))
         $orderid = mysqli_insert_id($con);
         $_SESSION['order_id'] = $orderid;
 
-            foreach ($ids as $item)
-            {
-                $query_detail = "INSERT INTO `order_details` (`product_id`, `order_id`, `count`) VALUES ('$item','$orderid', '1');";
-                mysqli_query($con, $query_detail);
-            }
+        foreach ($ids as $item)
+        {
+            $query_detail = "INSERT INTO `order_details` (`product_id`, `order_id`, `count`) VALUES ('$item','$orderid', '1');";
+            mysqli_query($con, $query_detail);
+        }
 
         $query_transaction = mysqli_query($con, "INSERT INTO `transection_history` (`order_id`, `total_price`, `payment_method`, `payment_status`, `pdf_invoice`, `date_time`, `token`) VALUES ('$orderid', '$total_price', 'Direct Bank', 'pending','admin/pdfs/$orderid-EMDN-Factura.pdf', NOW(), '');");
         $redsys = preparePOS($total_price, $redsysParams);
@@ -154,82 +154,83 @@ function generatePdf($con, $orderid)
     $from = 'Emdn@emdn.cat';
     $fromName = 'EMDN';
     $subject = "Comanda llibres EMDN.";
-    $htmlContent = '<html lang="en"><head>
-        <title>EMDN Comandes</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        </head>
-        <body style="background:white;font-size:11px">
-        <div style="margin:0 auto;width:100%;background:white;padding:12px">
-            <div style="margin-bottom:12px">
-                <a href="http://www.emdnstore.es/" >
-                    <img src="http://www.emdnstore.es/assets/imgs/logo.jpg" style="width:170px;height:100px;" alt="">
-                </a>
-            </div>
-            <p style="color:black;"><b>LLIBRES DE TEXT I MATERIAL INDIVIDUAL PER AL CURS ' . date("Y") . "-" . date('Y', strtotime('+1 year')) . '</b></p>
-            <div style="border:1px solid black;margin-bottom:10px">
-                <div style="width:45%;display:inline-block;border-right:1px solid black;margin-top:10px;padding-left:8px">
-                
-                    <p style="margin:0px"><b>Factura : </b> <span>' . $orderid . "-Comandes" . '</span></p>
-                    <p style="margin:0px"><b>Data factura : </b> <span>' . date("d M Y") . '</span></p>
-                    <p style="margin:0px"><b>Raó Social : </b> <span> IPEC S.L. </span></p>
-                    <p style="margin:0px"><b>CIF : </b> <span> B-58051889 </span></p>
-                    
-                </div>
-                <div style="width:45%;display:inline-block;margin-top:10px;padding-left:8px">
-                    <p style="margin:0px"><b> Nom Alumne/a: </b> ' . $order_data['name_std'] . '</p>
-                    <p style="margin:0px"><b>Nom Pare/Mare/Tutor: </b> ' . $order_data['name_fth'] . ' </p>
-                    <p style="margin:0px"><b>DNI:  </b> ' . $order_data['id_card'] . ' </p>
-                    <p style="margin:0px">&nbsp;</p>
-                </div>
-            </div>
-            <table style="border-collapse: collapse;width: 100%;margin-bottom:12px">
-            <tr style="border: 1px solid #dddddd;text-align: left;background: #b3aeae;">
-                <th style="padding: 8px;border:1px solid black">DESCRIPCIÓ</th>
-                <th style="padding: 8px;border:1px solid black">ISBN/CODI</th>
-                <th style="padding: 8px;border:1px solid black">EDITORIAL</th>
-                <th style="padding: 8px;border:1px solid black">Preu S/IVA</th>
-                <th style="padding: 8px;border:1px solid black">Preu+IVA</th>
-            </tr>            
-            ' . $books_details . '
-            </table>
-            <br>
-                <div style="width:55%;overflow:hidden;display:inline-block;margin-bottom:12px">
-                </div>
-                <div style="width:45%;overflow:hidden;display:inline-block;margin-bottom:12px;text-align:right;border: 1px solid black;padding:0px;">
-                <table style="width:100%;margin:0px">
-                    <tr style="text-align: left;">
-                                    
-                                        <td colspan="3" style="padding: 8px;border:1px solid black;text-align:right">Total</td>
-                                        <td style="padding: 8px;border:1px solid black"> € ' . number_format($total_without_iva, 2, ".", '') . '</td>
-                                        <td style="padding: 8px;border:1px solid black"> € ' . number_format($total, 2, ".", '') . '</td>
-                    </tr>
+    $htmlContent = '<!DOCTYPE html>
+        <html lang="es">
+            <head>
+                <title>EMDN Comandes</title>
+                <meta charset="iso-8859-1" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            </head>
+            <body style="background:white;font-size:11px">
+                <div style="margin:0 auto;width:100%;background:white;padding:12px">
+                    <div style="margin-bottom:12px">
+                        <a href="http://botiga.emdn.cat/" >
+                            <img src="http://botiga.emdn.cat/assets/imgs/logo.jpg" style="width:170px;height:100px;" alt="" />
+                        </a>
+                    </div>
+                    <p style="color:black;"><b>LLIBRES DE TEXT I MATERIAL INDIVIDUAL PER AL CURS ' . date("Y") . "-" . date('Y', strtotime('+1 year')) . '</b></p>
+                    <div style="border:1px solid black;margin-bottom:10px">
+                        <div style="width:45%;display:inline-block;border-right:1px solid black;margin-top:10px;padding-left:8px">                    
+                            <p style="margin:0px"><b>Factura : </b> <span>' . $orderid . "-Comandes" . '</span></p>
+                            <p style="margin:0px"><b>Data factura : </b> <span>' . date("d M Y") . '</span></p>
+                            <p style="margin:0px"><b>Raó Social : </b> <span> IPEC S.L. </span></p>
+                            <p style="margin:0px"><b>CIF : </b> <span> B-58051889 </span></p>                        
+                        </div>
+                        <div style="width:45%;display:inline-block;margin-top:10px;padding-left:8px">
+                            <p style="margin:0px"><b> Nom Alumne/a: </b> ' . $order_data['name_std'] . '</p>
+                            <p style="margin:0px"><b>Nom Pare/Mare/Tutor: </b> ' . $order_data['name_fth'] . ' </p>
+                            <p style="margin:0px"><b>DNI:  </b> ' . $order_data['id_card'] . ' </p>
+                            <p style="margin:0px"> </p>
+                        </div>
+                    </div>
+                    <table style="border-collapse: collapse;width: 100%;margin-bottom:12px">
+                        <thead>
+                            <tr style="border: 1px solid #dddddd;text-align: left;background: #b3aeae;">
+                                <th style="padding: 8px;border:1px solid black">DESCRIPCIÓ</th>
+                                <th style="padding: 8px;border:1px solid black">ISBN/CODI</th>
+                                <th style="padding: 8px;border:1px solid black">EDITORIAL</th>
+                                <th style="padding: 8px;border:1px solid black">Preu S/IVA</th>
+                                <th style="padding: 8px;border:1px solid black">Preu+IVA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ' . $books_details . '
+                        </tbody>
                     </table>
-                </div>            
-            <br>
-            <div style="width:48%;overflow:hidden;display:inline-block;margin-bottom:12px">
-            </div>
-            <div style="width:48%;overflow:hidden;display:inline-block;margin-bottom:12px;text-align:right">
-                <div >
-                    <p> <b>Base  4% : </b> € ' . number_format($iva_four, 2, ".", '') . '</p>
-                    <p> <b>Base  21% :  </b> € ' . number_format($iva_twenty, 2, ".", '') . ' </p>
+                    <br/>
+                    <div style="width:55%;overflow:hidden;display:inline-block;margin-bottom:12px"></div>
+                    <div style="width:45%;overflow:hidden;display:inline-block;margin-bottom:12px;text-align:right;border: 1px solid black;padding:0px;">
+                        <table style="width:100%;margin:0px">
+                            <tbody>
+                                <tr style="text-align: left;">
+                                    <td colspan="3" style="padding: 8px;border:1px solid black;text-align:right">Total</td>
+                                    <td style="padding: 8px;border:1px solid black"> € ' . number_format($total_without_iva, 2, ".", '') . '</td>
+                                    <td style="padding: 8px;border:1px solid black"> € ' . number_format($total, 2, ".", '') . '</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div style="width:48%;overflow:hidden;display:inline-block;margin-bottom:12px"></div>
+                    <div style="width:48%;overflow:hidden;display:inline-block;margin-bottom:12px;text-align:right">
+                        <div>
+                            <p> <b>Base  4% : </b> € ' . number_format($iva_four, 2, ".", '') . '</p>
+                            <p> <b>Base  21% :  </b> € ' . number_format($iva_twenty, 2, ".", '') . ' </p>
+                        </div>
+                    </div>
+                    <div style="width:79%;display:inline-block;margin-bottom:12px;text-align:right"></div>
                 </div>
-            </div>            
-            <div style="width:79%;display:inline-block;margin-bottom:12px;text-align:right">
-            <p>
-            </div>
-            <div style="width:20%;display:inline-block;margin-bottom:12px;text-align:right">
-                <div>
-                    <p style="border:1px solid black"> <b> Total :  </b>   ' . number_format($total, 2, ".", '') . ' € </p>
+                <div style="width:20%;display:inline-block;margin-bottom:12px;text-align:right">
+                    <div>
+                        <p style="border:1px solid black"> <b> Total :  </b>   ' . number_format($total, 2, ".", '') . ' € </p>
+                    </div>
                 </div>
-            </div>
-        </div>
-        </body>
+            </body>
         </html>';
-    
+        
     $query = "select * from config_messages where tipo = 1";
     $query_result = mysqli_query($con, $query);
 
@@ -241,10 +242,15 @@ function generatePdf($con, $orderid)
 
     $filename = "admin/pdfs/" . $orderid . "-EMDN-Factura.pdf";
 
-
     $dompdf = new Dompdf();
     $options = $dompdf->getOptions();
-    $options->set(array('isRemoteEnabled' => true));
+    $options->set([
+        'isRemoteEnabled' => true,
+        'debugLayoutLines' => false,
+        'debugLayoutBlocks' => false,
+        'debugLayoutInline' => false,
+        'debugLayoutPaddingBox' => false
+    ]);
     $dompdf->setOptions($options);
     $dompdf->loadHtml($htmlContent);
     $dompdf->setPaper('A4', 'verti');
@@ -253,40 +259,42 @@ function generatePdf($con, $orderid)
     $output = $dompdf->output();
     file_put_contents($filename, $output);
     
-			$mail = new PHPMailer;
-			
-			//$mail->SMTPDebug = 3;
-            
-			$from = 'Emdn@emdn.cat';
-			$fromName = 'EMDN';
-			$subject = "Comanda llibres EMDN.";
-			
-			$mail->isSMTP();
-			$mail->Host = 'smtp.gmail.com';
-			$mail->SMTPAuth = true;
-			$mail->Username = 'bracho.leandro.luz@gmail.com';
-			$mail->Password = 'hsegvmgdlclcshts';
-			$mail->SMTPSecure = 'tls';
-			$mail->Port = 587;
-			
-			$mail->setFrom($from, $fromName);
-			$mail->addAddress($_SESSION['order_email'], $_SESSION['fathername']);
-			$mail->addReplyTo($from, $fromName);
-			$mail->addStringAttachment($output,$filename);
-			$mail->isHTML(true);
-			
-			$mail->Subject = $subject;
-			$mail->Body    = $msg;
-			$mail->AltBody = $msg;
-			
-			if(!$mail->send()) {
-				$response['error'] = true;
-				$response['error_msg'] = "error in email";
-				print_r(error_get_last());
-			} else {
-				$response['error'] = false;
-				$response['success_msg'] = "Insertado con éxito!";
-			}
+    $mail = new PHPMailer;
+    
+    //$mail->SMTPDebug = 3;
+    
+    $from = 'Emdn@emdn.cat';
+    $fromName = 'EMDN';
+    $subject = "Comanda llibres EMDN.";
+    
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'bracho.leandro.luz@gmail.com';
+    $mail->Password = 'hsegvmgdlclcshts';
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+    
+    $mail->setFrom($from, $fromName);
+    $mail->addAddress($_SESSION['order_email'], $_SESSION['fathername']);
+    $mail->addReplyTo($from, $fromName);
+    $mail->addStringAttachment($output,$filename);
+    $mail->isHTML(true);
+    
+    $mail->Subject = $subject;
+    $mail->Body    = $msg;
+    $mail->AltBody = $msg;
+    
+    $mail->send();
+
+    /* if(!$mail->send()) {
+        $response['error'] = true;
+        $response['error_msg'] = "error in email";
+    } else {
+        $response['error'] = false;
+        $response['success_msg'] = "Insertado con éxito!";
+    }
+    print_r($response); */
 }
 
 function cutAfterDot($number, $afterDot = 2)
