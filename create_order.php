@@ -48,7 +48,7 @@ if (isset($_POST['place_order']))
             }
         }
 
-        $query_transaction = mysqli_query($con, "INSERT INTO `transection_history` ( `order_id`, `total_price`, `payment_method`, `payment_status`, `token`) VALUES ('$orderid', '$total_price', 'Direct Bank', 'pending','');");
+        $query_transaction = mysqli_query($con, "INSERT INTO `transection_history` (`order_id`, `total_price`, `payment_method`, `payment_status`, `pdf_invoice`, `date_time`, `token`) VALUES ('$orderid', '$total_price', 'Direct Bank', 'pending','admin/pdfs/$orderid-EMDN-Factura.pdf', NOW(), '');");
         $redsys = preparePOS($total_price, $redsysParams);
 
         $query_transaction = mysqli_query($con, "INSERT INTO `orders_redsys` (`redsys_order`, `order_id`, `approved`) VALUES ('$redsys->order', '$orderid', 0);");
