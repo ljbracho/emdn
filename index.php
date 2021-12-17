@@ -16,7 +16,7 @@ $msg = "";
 $results = mysqli_query($con, "SELECT * FROM config_messages WHERE tipo = 2 ORDER BY id ASC LIMIT 1");
 $data = mysqli_fetch_assoc($results);
 
-if ($data['estatus'] == 1) {
+//if ($data['estatus'] == 1) {
     $msg = $data["message"]; ?>
     <center>
         <img src="https://emdn.cat/wp-content/uploads/2019/12/Logo-EMDN.png">
@@ -33,7 +33,8 @@ if ($data['estatus'] == 1) {
         </table>
     </div>
     <?php
-} else {
+    die();
+//} else {
 
 $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`  WHERE course_id = '0'"));
 
@@ -81,7 +82,7 @@ $course_message = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM `messages`
     </div>
 </div>
 
-<?php }
+<?php // }
 if(isset($_SESSION['order_success'])) {
     if($_SESSION['order_success'] == 'yes') {
 ?>
