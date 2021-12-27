@@ -2715,8 +2715,17 @@ $(document).on("click",'.sidebar-menu li a,.btn-restaurant,.small-box-footer,.bt
 						  timer: 3000
 						});
 						$('#modal-edit').modal('hide');
-						if(dataTableAjax != undefined)
+						if(dataTableAjax != undefined) {
 							dataTableAjax.ajax.reload();
+							$.ajax({
+								url: 'invoice_pdf.php',
+								type: 'GET',
+								data: {
+									order_id: fieldData.catid,
+									update_pdf: true
+								}
+							});
+						}
 				}
 				$.preloader.stop();
 			},

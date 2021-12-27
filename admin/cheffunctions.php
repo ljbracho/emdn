@@ -282,6 +282,8 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 			$query_transaction = mysqli_query($con, "INSERT INTO `transection_history` ( `order_id`, `total_price`, `payment_method`, `payment_status`,`date_time`,`token`) VALUES ('$orderid', '$total_price', 'Direct Bank', 'paid','$date','');");
 
 			$order_data = mysqli_fetch_assoc(mysqli_query($con, "select * from orders where id = " . $orderid));
+			$transaction_data = mysqli_fetch_assoc(mysqli_query($con,"select * from transection_history where order_id = $orderid limit 1"));
+
 			$iva_four = 0;
 			$iva_twenty = 0;
 			$order_details = mysqli_query($con, "select * from order_details where order_id = " . $orderid);
@@ -338,7 +340,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
                 <div style="width:45%;display:inline-block;border-right:1px solid black;margin-top:10px;padding-left:8px">
                 
                     <p style="margin:0px"><b>Factura : </b> <span>' . $orderid . "-Comandes" . '</span></p>
-                    <p style="margin:0px"><b>Data factura : </b> <span>' . date("d M Y") . '</span></p>
+                    <p style="margin:0px"><b>Data factura : </b> <span>' . $transaction_data['date_time'] . '</span></p>
                     <p style="margin:0px"><b>Raó Social : </b> <span> IPEC S.L. </span></p>
                     <p style="margin:0px"><b>CIF : </b> <span> B-58051889 </span></p>
                     
@@ -1180,12 +1182,12 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 				## Search 
 				$searchQuery = " ";
 				if ($searchValue != '') {
-					$searchQuery = " and (totalPrice like '%" . $searchValue . "%' ) ";
-					$searchQuery .= " OR (name_std like '%" . $searchValue . "%' ) ";
-					$searchQuery .= " OR (name_fth like '%" . $searchValue . "%' ) ";
-					$searchQuery .= " OR (id_card like '%" . $searchValue . "%' ) ";
-					$searchQuery .= " OR (email like '%" . $searchValue . "%' ) ";
-					$searchQuery .= " OR (contact_number like '%" . $searchValue . "%' ) ";
+					$searchQuery = " AND (total_price like '%$searchValue%' ";
+					$searchQuery .= " OR name_std like '%$searchValue%' ";
+					$searchQuery .= " OR name_fth like '%$searchValue%' ";
+					$searchQuery .= " OR id_card like '%$searchValue%' ";
+					$searchQuery .= " OR email like '%$searchValue%' ";
+					$searchQuery .= " OR contact_number like '%$searchValue%' )";
 				}
 
 				$where_status = intval($_GET['pending']) == 1 ? 'pending' : 'paid';
@@ -1196,12 +1198,12 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 				$totalRecords = $records['allcount'];
 
 				## Total number of record with filtering
-				$sel = mysqli_query($con, "select count(*) as allcount from orders WHERE 1 " . $searchQuery . " AND payment_status = '$where_status'");
+				$sel = mysqli_query($con, "select count(*) as allcount from orders WHERE payment_status = '$where_status' $searchQuery");
 				$records = mysqli_fetch_assoc($sel);
 				$totalRecordwithFilter = $records['allcount'];
 
 				## Fetch records
-				$empQuery = "SELECT * from orders   WHERE 1 " . $searchQuery . " AND  payment_status = '$where_status' order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
+				$empQuery = "SELECT * from orders WHERE payment_status = '$where_status' $searchQuery order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
 				$empRecords = mysqli_query($con, $empQuery);
 				$data = array();
 
@@ -1268,7 +1270,12 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 				## Search 
 				$searchQuery = " ";
 				if ($searchValue != '') {
-					$searchQuery = " and (totalPrice like '%" . $searchValue . "%' ) ";
+					$searchQuery = " AND (total_price like '%$searchValue%' ";
+					$searchQuery .= " OR name_std like '%$searchValue%' ";
+					$searchQuery .= " OR name_fth like '%$searchValue%' ";
+					$searchQuery .= " OR id_card like '%$searchValue%' ";
+					$searchQuery .= " OR email like '%$searchValue%' ";
+					$searchQuery .= " OR contact_number like '%$searchValue%' )";
 				}
 
 				## Total number of records without filtering
@@ -1277,12 +1284,12 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 				$totalRecords = $records['allcount'];
 
 				## Total number of record with filtering
-				$sel = mysqli_query($con, "select count(*) as allcount from orders WHERE 1 " . $searchQuery . " AND (order_status = 'completed' OR order_status = 'cancelled')");
+				$sel = mysqli_query($con, "select count(*) as allcount from orders WHERE (order_status = 'completed' OR order_status = 'cancelled') $searchQuery");
 				$records = mysqli_fetch_assoc($sel);
 				$totalRecordwithFilter = $records['allcount'];
 
 				## Fetch records
-				$empQuery = "SELECT * from orders   WHERE 1 " . $searchQuery . " AND  (order_status = 'completed' OR order_status = 'cancelled') order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
+				$empQuery = "SELECT * from orders WHERE (order_status = 'completed' OR order_status = 'cancelled') $searchQuery order by " . $columnName . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
 				$empRecords = mysqli_query($con, $empQuery);
 				$data = array();
 

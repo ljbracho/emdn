@@ -20,8 +20,9 @@ if(isset($_GET['order_id']) && is_numeric($_GET['order_id'])){
     $dompdf->setOptions($options);
     
     include('connection.php');
-    $order_data = mysqli_fetch_assoc(mysqli_query($con,"select * from orders where id = ".$_GET['order_id'])); 
-    
+    $order_data = mysqli_fetch_assoc(mysqli_query($con,"select * from orders where id = ".$_GET['order_id']));
+    $transaction_data = mysqli_fetch_assoc(mysqli_query($con,"select * from transection_history where order_id = ".$order_data['id']." limit 1"));
+
     $order_details = mysqli_query($con,"select * from order_details where order_id = ".$_GET['order_id']);
      while($single_book = mysqli_fetch_assoc($order_details)){
              
@@ -78,7 +79,7 @@ if(isset($_GET['order_id']) && is_numeric($_GET['order_id'])){
                 <div style="width:45%;display:inline-block;border-right:1px solid black;margin-top:10px;padding-left:8px">
                 
                     <p style="margin:0px"><b>Factura : </b> <span>'.$_GET['order_id']."-Comandes".'</span></p>
-                    <p style="margin:0px"><b>Data factura : </b> <span>'.date("d M Y").'</span></p>
+                    <p style="margin:0px"><b>Data factura : </b> <span>'.$transaction_data['date_time'].'</span></p>
                     <p style="margin:0px"><b>Raó Social : </b> <span> IPEC S.L. </span></p>
                     <p style="margin:0px"><b>CIF : </b> <span> B-58051889 </span></p>
                     
@@ -147,9 +148,15 @@ if(isset($_GET['order_id']) && is_numeric($_GET['order_id'])){
      
     // Render the HTML as PDF 
     $dompdf->render(); 
-     
-    // Output the generated PDF to Browser 
-    $dompdf->stream("EMDN Order Invoice", array("Attachment" => 1));
+    
+    if (isset($_GET['update_pdf']) && boolval($_GET['update_pdf'])) {
+        $filename = "pdfs/" . $_GET['order_id'] . "-EMDN-Factura.pdf";
+        $output = $dompdf->output();
+        file_put_contents($filename, $output);
+    } else {
+        // Output the generated PDF to Browser 
+        $dompdf->stream("EMDN Order Invoice", array("Attachment" => 1));
+    }
 }
 
 
