@@ -1181,6 +1181,11 @@ if(isset($_POST['action']) && $_POST['action'] == 'get_modal' ){
 				$searchQuery = " ";
 				if ($searchValue != '') {
 					$searchQuery = " and (totalPrice like '%" . $searchValue . "%' ) ";
+					$searchQuery .= " OR (name_std like '%" . $searchValue . "%' ) ";
+					$searchQuery .= " OR (name_fth like '%" . $searchValue . "%' ) ";
+					$searchQuery .= " OR (id_card like '%" . $searchValue . "%' ) ";
+					$searchQuery .= " OR (email like '%" . $searchValue . "%' ) ";
+					$searchQuery .= " OR (contact_number like '%" . $searchValue . "%' ) ";
 				}
 
 				$where_status = intval($_GET['pending']) == 1 ? 'pending' : 'paid';
