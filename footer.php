@@ -4,6 +4,13 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="/assets/js/custom.js"></script>
 <script>
+$(document).ready(function(){  
+  if ( document.URL == '<?php echo $base_url ?>' || document.URL == '<?php echo $base_url ?>index.php' ){
+    $("#form_book select[name='etapa'").val(0);
+    $("#form_book select[name='course'").val(0);
+  }
+});
+
 var slideIndex = 1;
 showSlides(slideIndex);
 
